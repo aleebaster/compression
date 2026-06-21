@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { LogIn, Package, Eye, EyeOff } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-store";
+import Logo from "@/components/Logo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -48,9 +49,10 @@ export default function AdminLoginPage() {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[#E31837]">
               <Package className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              COMPEX <span className="text-[#E31837]">Admin</span>
-            </h1>
+            <div className="flex items-center justify-center gap-2">
+              <Logo size="lg" />
+              <span className="text-lg font-medium text-gray-500">Admin</span>
+            </div>
             <p className="mt-1 text-sm text-gray-500">
               Увійдіть до панелі управління
             </p>

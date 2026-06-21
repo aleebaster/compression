@@ -13,6 +13,9 @@ import {
   RotateCcw,
   Eye,
   EyeOff,
+  Upload,
+  X,
+  Image,
 } from "lucide-react";
 import { useAdminSettings } from "@/lib/admin-store";
 
@@ -300,7 +303,106 @@ export default function AdminSettingsPage() {
         </SectionCard>
 
         <SectionCard icon={Palette} title="Брендинг">
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* Logo Upload */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                Логотип
+              </label>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  {localSettings.logoUrl ? (
+                    <div className="relative h-16 w-32 rounded-lg border border-gray-200 bg-gray-50 p-2">
+                      <img
+                        src={localSettings.logoUrl}
+                        alt="Logo preview"
+                        className="h-full w-full object-contain"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => update("logoUrl", "")}
+                        className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white shadow-sm hover:bg-red-600"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex h-16 w-32 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-[#E31837] hover:bg-gray-100">
+                      <Upload className="h-5 w-5 text-gray-400" />
+                      <span className="mt-1 text-xs text-gray-500">Завантажити</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              update("logoUrl", ev.target?.result as string);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                      />
+                    </label>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  Рекомендований розмір: 200×40px. Підтримуються PNG, SVG, JPG.
+                </p>
+              </div>
+            </div>
+
+            {/* Favicon Upload */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                Favicon
+              </label>
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  {localSettings.faviconUrl ? (
+                    <div className="relative h-10 w-10 rounded-lg border border-gray-200 bg-gray-50 p-1">
+                      <img
+                        src={localSettings.faviconUrl}
+                        alt="Favicon preview"
+                        className="h-full w-full object-contain"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => update("faviconUrl", "")}
+                        className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white shadow-sm hover:bg-red-600"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex h-10 w-10 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-[#E31837] hover:bg-gray-100">
+                      <Image className="h-4 w-4 text-gray-400" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              update("faviconUrl", ev.target?.result as string);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                      />
+                    </label>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  Рекомендований розмір: 32×32px або 64×64px. Підтримуються PNG, ICO, SVG.
+                </p>
+              </div>
+            </div>
+
             <ColorPicker
               label="Основний колір"
               value={localSettings.primaryColor || "#E31837"}

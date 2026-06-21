@@ -121,10 +121,19 @@ export interface Banner {
   id: string;
   title: string;
   subtitle?: string;
-  image: string;
   link?: string;
   isActive: boolean;
   order: number;
+  desktopImage: string;
+  tabletImage: string;
+  mobileImage: string;
+  positionX: number;
+  positionY: number;
+  objectPosition: string;
+  scale: number;
+  heightDesktop: number;
+  heightTablet: number;
+  heightMobile: number;
 }
 
 export interface PromoCode {

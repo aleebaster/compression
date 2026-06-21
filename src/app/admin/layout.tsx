@@ -20,6 +20,7 @@ import {
   Search,
 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-store";
+import Logo from "@/components/Logo";
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -107,12 +108,8 @@ export default function AdminLayout({
       >
         <div className="flex h-16 items-center justify-between border-b border-white/10 px-6">
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E31837]">
-              <Package className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-lg font-bold text-white">
-              COMPEX <span className="text-[#E31837]">Admin</span>
-            </span>
+            <Logo size="sm" className="text-white" />
+            <span className="text-sm font-medium text-gray-400">Admin</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}

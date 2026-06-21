@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Camera,
@@ -7,6 +9,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const navLinks = [
   {
@@ -59,9 +62,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block">
-              <span className="text-2xl font-bold tracking-wider text-white">
-                COMPEX
-              </span>
+              <Logo size="lg" className="text-white" />
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-400">
               Преміальний компресійний одяг для активного життя та здоров&apos;я

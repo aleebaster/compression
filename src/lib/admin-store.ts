@@ -411,6 +411,8 @@ const defaultSettings: Record<string, string> = {
   primaryColor: "#E31837",
   secondaryColor: "#1A1A1A",
   accentColor: "#3B82F6",
+  logoUrl: "",
+  faviconUrl: "",
 };
 
 export const useAdminSettings = create<AdminSettingsState>()(

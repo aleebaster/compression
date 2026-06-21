@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Search, ShoppingBag, User, ChevronDown } from "lucide-react";
 import { useCartStore } from "@/lib/store";
 import { categories } from "@/lib/data";
+import Logo from "@/components/Logo";
 
 const navLinks = [
   { label: "Чоловічий", href: "/category/men" },
@@ -88,10 +89,7 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
-              <span className="text-xl font-bold tracking-tight lg:text-2xl">
-                COMP
-                <span className="text-[#E31837]">EX</span>
-              </span>
+              <Logo size="md" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -280,9 +278,8 @@ export default function Header() {
                 <Link
                   href="/"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-xl font-bold tracking-tight"
                 >
-                  COMP<span className="text-[#E31837]">EX</span>
+                  <Logo size="md" />
                 </Link>
                 <button
                   type="button"
