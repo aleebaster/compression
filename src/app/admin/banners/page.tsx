@@ -1428,7 +1428,7 @@ function PreviewTab({ formData }: { formData: BannerFormData }) {
           </div>
           <div className="mx-auto" style={{ maxWidth: 768 }}>
             <PreviewBanner
-              image={formData.tabletImage || formData.desktopImage}
+              image={formData.tabletImage}
               height={parseWidthValue(formData.height.tablet)}
               positionX={formData.positionX}
               positionY={formData.positionY}
@@ -1450,7 +1450,7 @@ function PreviewTab({ formData }: { formData: BannerFormData }) {
           </div>
           <div className="mx-auto" style={{ maxWidth: 375 }}>
             <PreviewBanner
-              image={formData.mobileImage || formData.tabletImage || formData.desktopImage}
+              image={formData.mobileImage}
               height={parseWidthValue(formData.height.mobile)}
               positionX={formData.positionX}
               positionY={formData.positionY}
