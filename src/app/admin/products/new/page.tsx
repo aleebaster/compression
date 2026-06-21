@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import {
   ArrowLeft,
   Save,
-  Upload,
   X,
   Plus,
   Trash2,
 } from "lucide-react";
+import { useAdminProducts } from "@/lib/admin-store";
 import { categories, brands } from "@/lib/data";
 
 const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
@@ -44,33 +44,67 @@ interface ProductFormData {
   images: string[];
 }
 
+const emptyForm: ProductFormData = {
+  name: "",
+  slug: "",
+  description: "",
+  shortDesc: "",
+  price: "",
+  oldPrice: "",
+  sku: "",
+  categoryId: "",
+  brandId: "",
+  gender: "MEN",
+  stockQty: "",
+  isActive: true,
+  isFeatured: false,
+  isNew: false,
+  isSale: false,
+  sizes: [],
+  customSizes: [],
+  colors: [],
+  images: [],
+};
+
 export default function NewProductPage() {
   const router = useRouter();
-  const [isDragging, setIsDragging] = useState(false);
-  const [formData, setFormData] = useState<ProductFormData>({
-    name: "",
-    slug: "",
-    description: "",
-    shortDesc: "",
-    price: "",
-    oldPrice: "",
-    sku: "",
-    categoryId: "",
-    brandId: "",
-    gender: "MEN",
-    stockQty: "",
-    isActive: true,
-    isFeatured: false,
-    isNew: false,
-    isSale: false,
-    sizes: [],
-    customSizes: [],
-    colors: [],
-    images: [],
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("edit");
+  const { getProduct, addProduct, updateProduct } = useAdminProducts();
+
+  const [formData, setFormData] = useState<ProductFormData>(() => {
+    if (editId) {
+      const product = getProduct(editId);
+      if (product) {
+        return {
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          shortDesc: product.shortDesc || "",
+          price: product.price.toString(),
+          oldPrice: product.oldPrice?.toString() || "",
+          sku: product.sku || "",
+          categoryId: product.categoryId,
+          brandId: product.brandId || "",
+          gender: product.gender,
+          stockQty: product.stockQty.toString(),
+          isActive: product.isActive,
+          isFeatured: product.isFeatured,
+          isNew: product.isNew,
+          isSale: product.isSale,
+          sizes: product.sizes.map((s) => s.name),
+          customSizes: [],
+          colors: product.colors.map((c) => ({ name: c.name, hex: c.hex })),
+          images: product.images.map((img) => img.url),
+        };
+      }
+    }
+    return emptyForm;
   });
   const [newColor, setNewColor] = useState({ name: "", hex: "#000000" });
   const [newCustomSize, setNewCustomSize] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [imageInput, setImageInput] = useState("");
 
   const generateSlug = (name: string) => {
     return name
@@ -130,6 +164,23 @@ export default function NewProductPage() {
     }));
   };
 
+  const addImage = () => {
+    if (imageInput.trim() && !formData.images.includes(imageInput.trim())) {
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, imageInput.trim()],
+      }));
+      setImageInput("");
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) newErrors.name = "Назва обов'язкова";
@@ -147,13 +198,41 @@ export default function NewProductPage() {
       toast.error("Будь ласка, заповніть всі обов'язкові поля");
       return;
     }
-    toast.success("Товар успішно створено!");
+
+    const productData: Parameters<typeof addProduct>[0] = {
+      name: formData.name,
+      slug: formData.slug,
+      description: formData.description,
+      shortDesc: formData.shortDesc,
+      price: Number(formData.price),
+      oldPrice: formData.oldPrice ? Number(formData.oldPrice) : undefined,
+      sku: formData.sku || undefined,
+      categoryId: formData.categoryId,
+      brandId: formData.brandId || undefined,
+      gender: formData.gender as "MEN" | "WOMEN" | "KIDS" | "UNISEX",
+      isActive: formData.isActive,
+      isFeatured: formData.isFeatured,
+      isNew: formData.isNew,
+      isSale: formData.isSale,
+      inStock: Number(formData.stockQty) > 0,
+      stockQty: Number(formData.stockQty),
+      images: formData.images,
+      sizes: [...formData.sizes, ...formData.customSizes],
+      colors: formData.colors,
+    };
+
+    if (editId) {
+      updateProduct(editId, productData as unknown as Record<string, unknown>);
+      toast.success("Товар оновлено!");
+    } else {
+      addProduct(productData);
+      toast.success("Товар створено!");
+    }
     router.push("/admin/products");
   };
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      {/* Header */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => router.back()}
@@ -162,16 +241,17 @@ export default function NewProductPage() {
           <ArrowLeft className="h-5 w-5" />
         </button>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Новий товар</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {editId ? "Редагувати товар" : "Новий товар"}
+          </h2>
           <p className="text-sm text-gray-500">
-            Додайте новий товар до каталогу
+            {editId ? "Оновіть інформацію про товар" : "Додайте новий товар до каталогу"}
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Main Info */}
           <div className="lg:col-span-2 space-y-6">
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
@@ -251,7 +331,6 @@ export default function NewProductPage() {
               </div>
             </div>
 
-            {/* Pricing */}
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
                 Ціна та склад
@@ -343,37 +422,26 @@ export default function NewProductPage() {
               </div>
             </div>
 
-            {/* Image Upload */}
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
                 Зображення
               </h3>
-              <div
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setIsDragging(true);
-                }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setIsDragging(false);
-                }}
-                className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors ${
-                  isDragging
-                    ? "border-[#E31837] bg-red-50"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <Upload className="mb-3 h-10 w-10 text-gray-400" />
-                <p className="text-sm font-medium text-gray-700">
-                  Перетягніть зображення сюди
-                </p>
-                <p className="mt-1 text-xs text-gray-500">
-                  або натисніть для вибору файлів
-                </p>
-                <p className="mt-2 text-xs text-gray-400">
-                  PNG, JPG до 5MB
-                </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={imageInput}
+                  onChange={(e) => setImageInput(e.target.value)}
+                  placeholder="URL зображення"
+                  className="flex-1 rounded-lg border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#E31837] focus:ring-1 focus:ring-[#E31837]"
+                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addImage())}
+                />
+                <button
+                  type="button"
+                  onClick={addImage}
+                  className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
               </div>
               {formData.images.length > 0 && (
                 <div className="mt-4 grid grid-cols-4 gap-3">
@@ -382,12 +450,7 @@ export default function NewProductPage() {
                       <Image src={img} alt="" fill className="object-cover" />
                       <button
                         type="button"
-                        onClick={() =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            images: prev.images.filter((_, j) => j !== i),
-                          }))
-                        }
+                        onClick={() => removeImage(i)}
                         className="absolute right-1 top-1 rounded-full bg-red-500 p-1 text-white"
                       >
                         <X className="h-3 w-3" />
@@ -399,9 +462,7 @@ export default function NewProductPage() {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Status Toggles */}
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
                 Статус
@@ -445,7 +506,6 @@ export default function NewProductPage() {
               </div>
             </div>
 
-            {/* Category & Brand */}
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
                 Класифікація
@@ -535,7 +595,6 @@ export default function NewProductPage() {
               </div>
             </div>
 
-            {/* Sizes */}
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
                 Розміри
@@ -594,7 +653,6 @@ export default function NewProductPage() {
               )}
             </div>
 
-            {/* Colors */}
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="mb-4 text-lg font-semibold text-gray-900">
                 Кольори
@@ -653,14 +711,13 @@ export default function NewProductPage() {
               )}
             </div>
 
-            {/* Actions */}
             <div className="flex gap-3">
               <button
                 type="submit"
                 className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#E31837] px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-[#B5122C] transition-colors"
               >
                 <Save className="h-4 w-4" />
-                Зберегти
+                {editId ? "Оновити" : "Зберегти"}
               </button>
               <button
                 type="button"

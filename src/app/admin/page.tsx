@@ -1,90 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import {
   Package,
   ShoppingCart,
   DollarSign,
-  Users,
+  TrendingUp,
   Plus,
   Eye,
-  TrendingUp,
-  ArrowUpRight,
-  ArrowDownRight,
+  Clock,
 } from "lucide-react";
-
-const stats = [
-  {
-    label: "Всього товарів",
-    value: "156",
-    change: "+12%",
-    trend: "up",
-    icon: Package,
-    color: "bg-blue-500",
-  },
-  {
-    label: "Замовлення",
-    value: "89",
-    change: "+8%",
-    trend: "up",
-    icon: ShoppingCart,
-    color: "bg-[#E31837]",
-  },
-  {
-    label: "Дохід",
-    value: "₴245,600",
-    change: "+23%",
-    trend: "up",
-    icon: DollarSign,
-    color: "bg-green-500",
-  },
-  {
-    label: "Активні користувачі",
-    value: "1,234",
-    change: "-2%",
-    trend: "down",
-    icon: Users,
-    color: "bg-purple-500",
-  },
-];
-
-const recentOrders = [
-  {
-    id: "ORD-7891",
-    customer: "Олександр Петренко",
-    date: "21.06.2026",
-    total: "₴4,297",
-    status: "NEW",
-  },
-  {
-    id: "ORD-7890",
-    customer: "Марія Коваленко",
-    date: "20.06.2026",
-    total: "₴2,498",
-    status: "PROCESSING",
-  },
-  {
-    id: "ORD-7889",
-    customer: "Дмитро Шевченко",
-    date: "20.06.2026",
-    total: "₴1,899",
-    status: "SHIPPED",
-  },
-  {
-    id: "ORD-7888",
-    customer: "Анна Мельник",
-    date: "19.06.2026",
-    total: "₴3,197",
-    status: "DELIVERED",
-  },
-  {
-    id: "ORD-7887",
-    customer: "Іван Бондаренко",
-    date: "19.06.2026",
-    total: "₴999",
-    status: "CANCELLED",
-  },
-];
+import { useAdminProducts, useAdminOrders } from "@/lib/admin-store";
+import { formatPrice } from "@/lib/data";
 
 const statusColors: Record<string, string> = {
   NEW: "bg-blue-100 text-blue-700",
@@ -103,9 +31,53 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function AdminDashboard() {
+  const { products } = useAdminProducts();
+  const { orders } = useAdminOrders();
+
+  const stats = useMemo(() => {
+    const totalProducts = products.length;
+    const totalOrders = orders.length;
+    const totalRevenue = orders
+      .filter((o) => o.status !== "CANCELLED")
+      .reduce((sum, o) => sum + o.total, 0);
+    const pendingOrders = orders.filter((o) => o.status === "NEW").length;
+
+    return [
+      {
+        label: "Всього товарів",
+        value: totalProducts.toString(),
+        icon: Package,
+        color: "bg-blue-500",
+      },
+      {
+        label: "Замовлення",
+        value: totalOrders.toString(),
+        icon: ShoppingCart,
+        color: "bg-[#E31837]",
+      },
+      {
+        label: "Дохід",
+        value: formatPrice(totalRevenue),
+        icon: DollarSign,
+        color: "bg-green-500",
+      },
+      {
+        label: "Очікують",
+        value: pendingOrders.toString(),
+        icon: Clock,
+        color: "bg-yellow-500",
+      },
+    ];
+  }, [products, orders]);
+
+  const recentOrders = useMemo(() => {
+    return [...orders]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5);
+  }, [orders]);
+
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
@@ -120,18 +92,6 @@ export default function AdminDashboard() {
                 >
                   <Icon className="h-6 w-6 text-white" />
                 </div>
-                <span
-                  className={`flex items-center gap-1 text-sm font-medium ${
-                    stat.trend === "up" ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {stat.trend === "up" ? (
-                    <ArrowUpRight className="h-4 w-4" />
-                  ) : (
-                    <ArrowDownRight className="h-4 w-4" />
-                  )}
-                  {stat.change}
-                </span>
               </div>
               <div className="mt-4">
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
@@ -143,7 +103,6 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Recent Orders */}
         <div className="lg:col-span-2 rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
             <h2 className="text-lg font-semibold text-gray-900">
@@ -162,7 +121,6 @@ export default function AdminDashboard() {
                 <tr className="border-b border-gray-100 text-left text-xs font-medium uppercase text-gray-500">
                   <th className="px-6 py-3">Замовлення</th>
                   <th className="px-6 py-3">Клієнт</th>
-                  <th className="px-6 py-3">Дата</th>
                   <th className="px-6 py-3">Сума</th>
                   <th className="px-6 py-3">Статус</th>
                 </tr>
@@ -174,16 +132,13 @@ export default function AdminDashboard() {
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                      {order.id}
+                      {order.orderNumber}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
-                      {order.customer}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                      {order.date}
+                      {order.firstName} {order.lastName}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                      {order.total}
+                      {formatPrice(order.total)}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <span
@@ -201,9 +156,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions & Chart */}
         <div className="space-y-6">
-          {/* Quick Actions */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Швидкі дії
@@ -233,7 +186,6 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Revenue Chart Placeholder */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">Дохід</h2>

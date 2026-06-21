@@ -10,53 +10,11 @@ import {
   Palette,
   Phone,
   Share2,
-  Upload,
   RotateCcw,
   Eye,
   EyeOff,
 } from "lucide-react";
-
-interface SettingsData {
-  shopName: string;
-  description: string;
-  phone: string;
-  email: string;
-  address: string;
-  facebook: string;
-  instagram: string;
-  telegram: string;
-  tiktok: string;
-  metaTitle: string;
-  metaDescription: string;
-  smtpHost: string;
-  smtpPort: string;
-  smtpUsername: string;
-  smtpPassword: string;
-  primaryColor: string;
-  secondaryColor: string;
-  accentColor: string;
-}
-
-const defaultSettings: SettingsData = {
-  shopName: "COMPEX",
-  description: "Компресійний одяг для спорту та активного способу життя",
-  phone: "",
-  email: "",
-  address: "",
-  facebook: "",
-  instagram: "",
-  telegram: "",
-  tiktok: "",
-  metaTitle: "COMPEX — Компресійний одяг",
-  metaDescription: "Інтернет-магазин компресійного одягу для спорту та активного способу життя",
-  smtpHost: "",
-  smtpPort: "587",
-  smtpUsername: "",
-  smtpPassword: "",
-  primaryColor: "#E31837",
-  secondaryColor: "#1A1A1A",
-  accentColor: "#3B82F6",
-};
+import { useAdminSettings } from "@/lib/admin-store";
 
 function SectionCard({
   icon: Icon,
@@ -138,25 +96,6 @@ function TextareaField({
   );
 }
 
-function UploadZone({ label }: { label: string }) {
-  return (
-    <div>
-      <label className="mb-1.5 block text-sm font-medium text-gray-700">
-        {label}
-      </label>
-      <div className="flex items-center gap-4 rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center transition-colors hover:border-[#E31837]/40 hover:bg-[#E31837]/5 cursor-pointer">
-        <Upload className="h-8 w-8 text-gray-400" />
-        <div>
-          <p className="text-sm font-medium text-gray-700">
-            Натисніть або перетягніть файл
-          </p>
-          <p className="mt-1 text-xs text-gray-500">PNG, JPG до 2MB</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ColorPicker({
   label,
   value,
@@ -192,25 +131,28 @@ function ColorPicker({
 }
 
 export default function AdminSettingsPage() {
-  const [settings, setSettings] = useState<SettingsData>(defaultSettings);
+  const { settings, updateSetting, resetSettings } = useAdminSettings();
+  const [localSettings, setLocalSettings] = useState<Record<string, string>>(() => ({ ...settings }));
   const [showSmtpPassword, setShowSmtpPassword] = useState(false);
 
-  const update = (key: keyof SettingsData, value: string) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
+  const update = (key: string, value: string) => {
+    setLocalSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSave = () => {
+    Object.entries(localSettings).forEach(([key, value]) => {
+      updateSetting(key, value);
+    });
     toast.success("Налаштування збережено!");
   };
 
   const handleReset = () => {
-    setSettings(defaultSettings);
+    resetSettings();
     toast("Налаштування скинуті", { icon: "🔄" });
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Налаштування</h2>
@@ -221,120 +163,112 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        {/* General Settings */}
         <SectionCard icon={Settings} title="Загальні налаштування">
           <div className="space-y-4">
             <InputField
               label="Назва магазину"
               placeholder="COMPEX"
-              value={settings.shopName}
+              value={localSettings.shopName || ""}
               onChange={(v) => update("shopName", v)}
             />
             <TextareaField
               label="Опис"
               placeholder="Компресійний одяг для спорту..."
-              value={settings.description}
+              value={localSettings.description || ""}
               onChange={(v) => update("description", v)}
             />
-            <UploadZone label="Логотип" />
-            <UploadZone label="Фавікон" />
           </div>
         </SectionCard>
 
-        {/* Contact Information */}
         <SectionCard icon={Phone} title="Контактна інформація">
           <div className="space-y-4">
             <InputField
               label="Телефон"
               placeholder="+380 (XX) XXX-XX-XX"
-              value={settings.phone}
+              value={localSettings.phone || ""}
               onChange={(v) => update("phone", v)}
             />
             <InputField
               label="Email"
               placeholder="info@compex.ua"
-              value={settings.email}
+              value={localSettings.email || ""}
               onChange={(v) => update("email", v)}
               type="email"
             />
             <TextareaField
               label="Адреса"
               placeholder="вул. Приклад, 1, м. Київ"
-              value={settings.address}
+              value={localSettings.address || ""}
               onChange={(v) => update("address", v)}
               rows={2}
             />
           </div>
         </SectionCard>
 
-        {/* Social Media */}
         <SectionCard icon={Share2} title="Соціальні мережі">
           <div className="space-y-4">
             <InputField
               label="Facebook URL"
               placeholder="https://facebook.com/compex"
-              value={settings.facebook}
+              value={localSettings.facebook || ""}
               onChange={(v) => update("facebook", v)}
             />
             <InputField
               label="Instagram URL"
               placeholder="https://instagram.com/compex"
-              value={settings.instagram}
+              value={localSettings.instagram || ""}
               onChange={(v) => update("instagram", v)}
             />
             <InputField
               label="Telegram URL"
               placeholder="https://t.me/compex"
-              value={settings.telegram}
+              value={localSettings.telegram || ""}
               onChange={(v) => update("telegram", v)}
             />
             <InputField
               label="TikTok URL"
               placeholder="https://tiktok.com/@compex"
-              value={settings.tiktok}
+              value={localSettings.tiktok || ""}
               onChange={(v) => update("tiktok", v)}
             />
           </div>
         </SectionCard>
 
-        {/* SEO Settings */}
         <SectionCard icon={Globe} title="Налаштування SEO">
           <div className="space-y-4">
             <InputField
               label="Meta Title"
               placeholder="COMPEX — Компресійний одяг"
-              value={settings.metaTitle}
+              value={localSettings.metaTitle || ""}
               onChange={(v) => update("metaTitle", v)}
             />
             <TextareaField
               label="Meta Description"
               placeholder="Інтернет-магазин компресійного одягу..."
-              value={settings.metaDescription}
+              value={localSettings.metaDescription || ""}
               onChange={(v) => update("metaDescription", v)}
             />
-            <UploadZone label="OpenGraph зображення" />
           </div>
         </SectionCard>
 
-        {/* Email (SMTP) */}
         <SectionCard icon={Mail} title="Email (SMTP)">
           <div className="space-y-4">
             <InputField
               label="SMTP Host"
               placeholder="smtp.gmail.com"
-              value={settings.smtpHost}
+              value={localSettings.smtpHost || ""}
               onChange={(v) => update("smtpHost", v)}
             />
             <InputField
               label="SMTP Port"
               placeholder="587"
-              value={settings.smtpPort}
+              value={localSettings.smtpPort || ""}
               onChange={(v) => update("smtpPort", v)}
             />
             <InputField
               label="SMTP Username"
               placeholder="user@gmail.com"
-              value={settings.smtpUsername}
+              value={localSettings.smtpUsername || ""}
               onChange={(v) => update("smtpUsername", v)}
             />
             <div>
@@ -345,7 +279,7 @@ export default function AdminSettingsPage() {
                 <input
                   type={showSmtpPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  value={settings.smtpPassword}
+                  value={localSettings.smtpPassword || ""}
                   onChange={(e) => update("smtpPassword", e.target.value)}
                   className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 pr-10 text-sm text-gray-900 outline-none transition-colors focus:border-[#E31837] focus:bg-white focus:ring-1 focus:ring-[#E31837]"
                 />
@@ -365,29 +299,27 @@ export default function AdminSettingsPage() {
           </div>
         </SectionCard>
 
-        {/* Branding */}
         <SectionCard icon={Palette} title="Брендинг">
           <div className="space-y-4">
             <ColorPicker
               label="Основний колір"
-              value={settings.primaryColor}
+              value={localSettings.primaryColor || "#E31837"}
               onChange={(v) => update("primaryColor", v)}
             />
             <ColorPicker
               label="Другорядний колір"
-              value={settings.secondaryColor}
+              value={localSettings.secondaryColor || "#1A1A1A"}
               onChange={(v) => update("secondaryColor", v)}
             />
             <ColorPicker
               label="Акцентний колір"
-              value={settings.accentColor}
+              value={localSettings.accentColor || "#3B82F6"}
               onChange={(v) => update("accentColor", v)}
             />
           </div>
         </SectionCard>
       </div>
 
-      {/* Action Buttons */}
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <button
           onClick={handleReset}

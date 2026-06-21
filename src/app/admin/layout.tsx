@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import {
   LayoutDashboard,
@@ -19,6 +19,7 @@ import {
   Bell,
   Search,
 } from "lucide-react";
+import { useAdminAuth } from "@/lib/admin-store";
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -48,6 +49,27 @@ export default function AdminLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, isAuthenticated, logout } = useAdminAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated && pathname !== "/admin/login") {
+      router.push("/admin/login");
+    }
+  }, [isAuthenticated, pathname, router]);
+
+  if (!isAuthenticated && pathname !== "/admin/login") {
+    return null;
+  }
+
+  if (pathname === "/admin/login") {
+    return (
+      <>
+        <Toaster position="top-right" />
+        {children}
+      </>
+    );
+  }
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin";
@@ -62,11 +84,15 @@ export default function AdminLayout({
     return "Admin";
   };
 
+  const handleLogout = () => {
+    logout();
+    router.push("/admin/login");
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       <Toaster position="top-right" />
 
-      {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
@@ -74,13 +100,11 @@ export default function AdminLayout({
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[#111111] transition-transform duration-300 lg:static lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Logo */}
         <div className="flex h-16 items-center justify-between border-b border-white/10 px-6">
           <Link href="/admin" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E31837]">
@@ -98,7 +122,6 @@ export default function AdminLayout({
           </button>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-1">
             {navItems.map((item) => {
@@ -126,26 +149,23 @@ export default function AdminLayout({
           </div>
         </nav>
 
-        {/* Footer */}
         <div className="border-t border-white/10 p-4">
           <div className="flex items-center gap-3 rounded-lg px-3 py-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E31837] text-sm font-bold text-white">
-              A
+              {user?.name?.[0] || "A"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">Admin</p>
-              <p className="text-xs text-gray-400 truncate">admin@compex.ua</p>
+              <p className="text-sm font-medium text-white truncate">{user?.name || "Admin"}</p>
+              <p className="text-xs text-gray-400 truncate">{user?.email || "admin@compex.ua"}</p>
             </div>
-            <button className="text-gray-400 hover:text-white">
+            <button onClick={handleLogout} className="text-gray-400 hover:text-white" title="Вийти">
               <LogOut className="h-4 w-4" />
             </button>
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Header */}
         <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 sm:px-6">
           <div className="flex items-center gap-4">
             <button
@@ -174,7 +194,6 @@ export default function AdminLayout({
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
       </div>
     </div>

@@ -3,20 +3,24 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import {
   Search,
   Plus,
   Edit2,
   Trash2,
+  Copy,
   ChevronLeft,
   ChevronRight,
   Package,
 } from "lucide-react";
-import { products, categories, formatPrice } from "@/lib/data";
+import { useAdminProducts } from "@/lib/admin-store";
+import { categories, formatPrice } from "@/lib/data";
 
 const ITEMS_PER_PAGE = 8;
 
 export default function AdminProductsPage() {
+  const { products, deleteProduct, duplicateProduct } = useAdminProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -26,7 +30,7 @@ export default function AdminProductsPage() {
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.slug.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery]);
+  }, [searchQuery, products]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
@@ -39,9 +43,22 @@ export default function AdminProductsPage() {
     return cat?.name || "—";
   };
 
+  const handleDelete = (id: string, name: string) => {
+    if (confirm(`Видалити товар "${name}"?`)) {
+      deleteProduct(id);
+      toast.success("Товар видалено");
+    }
+  };
+
+  const handleDuplicate = (id: string) => {
+    const newId = duplicateProduct(id);
+    if (newId) {
+      toast.success("Товар дубльовано");
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">
@@ -60,7 +77,6 @@ export default function AdminProductsPage() {
         </Link>
       </div>
 
-      {/* Search */}
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <input
@@ -75,7 +91,6 @@ export default function AdminProductsPage() {
         />
       </div>
 
-      {/* Table */}
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -165,10 +180,22 @@ export default function AdminProductsPage() {
                       <Link
                         href={`/admin/products/new?edit=${product.id}`}
                         className="rounded-lg p-2 text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                        title="Редагувати"
                       >
                         <Edit2 className="h-4 w-4" />
                       </Link>
-                      <button className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors">
+                      <button
+                        onClick={() => handleDuplicate(product.id)}
+                        className="rounded-lg p-2 text-gray-400 hover:bg-green-50 hover:text-green-600 transition-colors"
+                        title="Дублювати"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product.id, product.name)}
+                        className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        title="Видалити"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -179,7 +206,6 @@ export default function AdminProductsPage() {
           </table>
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4">
             <p className="text-sm text-gray-500">

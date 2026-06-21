@@ -1,147 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { Eye, ChevronUp } from "lucide-react";
+import toast from "react-hot-toast";
+import { useAdminOrders } from "@/lib/admin-store";
 import { formatPrice } from "@/lib/data";
 
 type OrderStatus = "NEW" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  status: OrderStatus;
-  customer: string;
-  email: string;
-  phone: string;
-  date: string;
-  total: number;
-  items: { name: string; qty: number; price: number; size?: string }[];
-  address: string;
-  paymentMethod: string;
-  deliveryMethod: string;
-  comment?: string;
-}
-
-const mockOrders: Order[] = [
-  {
-    id: "1",
-    orderNumber: "ORD-7891",
-    status: "NEW",
-    customer: "Олександр Петренко",
-    email: "oleksandr@test.com",
-    phone: "+380501234567",
-    date: "21.06.2026",
-    total: 4297,
-    items: [
-      { name: "Компресійна футболка Pro Max", qty: 2, price: 1299, size: "L" },
-      { name: "Компресійні шорти Elite", qty: 1, price: 999, size: "M" },
-      { name: "Рашгард Pro Compression", qty: 1, price: 1499, size: "XL" },
-    ],
-    address: "м. Київ, вул. Хрещатик, 22",
-    paymentMethod: "Онлайн оплата",
-    deliveryMethod: "Нова Пошта",
-    comment: "Будь ласка, загорніть у подарункову упаковку",
-  },
-  {
-    id: "2",
-    orderNumber: "ORD-7890",
-    status: "PROCESSING",
-    customer: "Марія Коваленко",
-    email: "maria@test.com",
-    phone: "+380671234567",
-    date: "20.06.2026",
-    total: 2498,
-    items: [
-      { name: "Жіночі компресійні легінси Flex", qty: 2, price: 1199, size: "S" },
-    ],
-    address: "м. Одessa, вул. Дерибасівська, 10",
-    paymentMethod: "Післяплата",
-    deliveryMethod: "Нова Пошта",
-  },
-  {
-    id: "3",
-    orderNumber: "ORD-7889",
-    status: "SHIPPED",
-    customer: "Дмитро Шевченко",
-    email: "dmytro@test.com",
-    phone: "+380931234567",
-    date: "20.06.2026",
-    total: 1899,
-    items: [
-      { name: "Рашгард Pro Compression", qty: 1, price: 1499, size: "M" },
-      { name: "Компресійні шорти Elite", qty: 1, price: 999, size: "L" },
-    ],
-    address: "м. Львів, вул. Свободи, 45",
-    paymentMethod: "Онлайн оплата",
-    deliveryMethod: "Кур'єр",
-  },
-  {
-    id: "4",
-    orderNumber: "ORD-7888",
-    status: "DELIVERED",
-    customer: "Анна Мельник",
-    email: "anna@test.com",
-    phone: "+380631234567",
-    date: "19.06.2026",
-    total: 3197,
-    items: [
-      { name: "Компресійна футболка Pro Max", qty: 1, price: 1299, size: "M" },
-      { name: "Жіночий компресійний топ Power", qty: 2, price: 899, size: "S" },
-    ],
-    address: "м. Харків, вул. Сумська, 78",
-    paymentMethod: "Онлайн оплата",
-    deliveryMethod: "Нова Пошта",
-  },
-  {
-    id: "5",
-    orderNumber: "ORD-7887",
-    status: "CANCELLED",
-    customer: "Іван Бондаренко",
-    email: "ivan@test.com",
-    phone: "+380501234568",
-    date: "19.06.2026",
-    total: 999,
-    items: [
-      { name: "Компресійні шорти Elite", qty: 1, price: 999, size: "XL" },
-    ],
-    address: "м. Дніпро, пр. Дмитра Яворницького, 55",
-    paymentMethod: "Післяплата",
-    deliveryMethod: "Нова Пошта",
-    comment: "Замовлення скасовано за запитом клієнта",
-  },
-  {
-    id: "6",
-    orderNumber: "ORD-7886",
-    status: "NEW",
-    customer: "Тетяна Шевчук",
-    email: "tetiana@test.com",
-    phone: "+380671234568",
-    date: "18.06.2026",
-    total: 1999,
-    items: [
-      { name: "Чоловічий компресійний комплект Apex", qty: 1, price: 1999, size: "L" },
-    ],
-    address: "м. Запоріжжя, вул. Перемоги, 33",
-    paymentMethod: "Онлайн оплата",
-    deliveryMethod: "Кур'єр",
-  },
-  {
-    id: "7",
-    orderNumber: "ORD-7885",
-    status: "PROCESSING",
-    customer: "Павло Максименко",
-    email: "pavlo@test.com",
-    phone: "+380931234568",
-    date: "18.06.2026",
-    total: 699,
-    items: [
-      { name: "Дитяча компресійна футболка Junior", qty: 1, price: 699, size: "152" },
-    ],
-    address: "м. Вінниця, вул. Соборна, 12",
-    paymentMethod: "Післяплата",
-    deliveryMethod: "Нова Пошта",
-  },
-];
 
 const statusTabs: { label: string; value: OrderStatus | "ALL" }[] = [
   { label: "Всі", value: "ALL" },
@@ -169,27 +34,32 @@ const statusLabels: Record<OrderStatus, string> = {
 };
 
 export default function AdminOrdersPage() {
+  const { orders, updateOrderStatus } = useAdminOrders();
   const [activeTab, setActiveTab] = useState<OrderStatus | "ALL">("ALL");
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
-  const filteredOrders =
-    activeTab === "ALL"
-      ? mockOrders
-      : mockOrders.filter((o) => o.status === activeTab);
+  const filteredOrders = useMemo(() => {
+    return activeTab === "ALL"
+      ? orders
+      : orders.filter((o) => o.status === activeTab);
+  }, [orders, activeTab]);
+
+  const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
+    updateOrderStatus(orderId, newStatus);
+    toast.success(`Статус змінено на "${statusLabels[newStatus]}"`);
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900">
           Управління замовленнями
         </h2>
         <p className="text-sm text-gray-500">
-          {mockOrders.length} замовлень всього
+          {orders.length} замовлень всього
         </p>
       </div>
 
-      {/* Status Tabs */}
       <div className="flex flex-wrap gap-2">
         {statusTabs.map((tab) => (
           <button
@@ -204,14 +74,13 @@ export default function AdminOrdersPage() {
             {tab.label}
             {tab.value !== "ALL" && (
               <span className="ml-1.5 text-xs opacity-75">
-                ({mockOrders.filter((o) => o.status === tab.value).length})
+                ({orders.filter((o) => o.status === tab.value).length})
               </span>
             )}
           </button>
         ))}
       </div>
 
-      {/* Orders Table */}
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -227,24 +96,21 @@ export default function AdminOrdersPage() {
             </thead>
             <tbody className="divide-y divide-gray-50">
               {filteredOrders.map((order) => (
-                <>
-                  <tr
-                    key={order.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
+                <Fragment key={order.id}>
+                  <tr className="hover:bg-gray-50 transition-colors">
                     <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
                       {order.orderNumber}
                     </td>
                     <td className="px-6 py-4">
                       <div>
                         <p className="text-sm font-medium text-gray-900">
-                          {order.customer}
+                          {order.firstName} {order.lastName}
                         </p>
                         <p className="text-xs text-gray-500">{order.email}</p>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
-                      {order.date}
+                      {new Date(order.createdAt).toLocaleDateString("uk-UA")}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
                       {formatPrice(order.total)}
@@ -276,7 +142,7 @@ export default function AdminOrdersPage() {
                     </td>
                   </tr>
                   {expandedOrder === order.id && (
-                    <tr key={`${order.id}-details`}>
+                    <tr>
                       <td colSpan={6} className="bg-gray-50 px-6 py-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                           <div>
@@ -290,16 +156,16 @@ export default function AdminOrdersPage() {
                                   className="flex items-center justify-between text-sm"
                                 >
                                   <span className="text-gray-600">
-                                    {item.name}{" "}
+                                    {item.product?.name || "Товар"}{" "}
                                     {item.size && (
                                       <span className="text-gray-400">
                                         ({item.size})
                                       </span>
                                     )}{" "}
-                                    × {item.qty}
+                                    × {item.quantity}
                                   </span>
                                   <span className="font-medium text-gray-900">
-                                    {formatPrice(item.price * item.qty)}
+                                    {formatPrice(item.price * item.quantity)}
                                   </span>
                                 </div>
                               ))}
@@ -311,7 +177,7 @@ export default function AdminOrdersPage() {
                             </h4>
                             <div className="space-y-1 text-sm text-gray-600">
                               <p>{order.deliveryMethod}</p>
-                              <p>{order.address}</p>
+                              <p>{order.city}, {order.address}</p>
                               <p>{order.phone}</p>
                             </div>
                           </div>
@@ -327,20 +193,37 @@ export default function AdminOrdersPage() {
                                 </p>
                               )}
                             </div>
-                            <div className="mt-3 flex gap-2">
+                            <div className="mt-3 flex flex-wrap gap-2">
                               {order.status === "NEW" && (
                                 <>
-                                  <button className="rounded-lg bg-blue-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600">
+                                  <button
+                                    onClick={() => handleStatusChange(order.id, "PROCESSING")}
+                                    className="rounded-lg bg-blue-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600 transition-colors"
+                                  >
                                     Прийняти
                                   </button>
-                                  <button className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-600">
+                                  <button
+                                    onClick={() => handleStatusChange(order.id, "CANCELLED")}
+                                    className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-600 transition-colors"
+                                  >
                                     Скасувати
                                   </button>
                                 </>
                               )}
                               {order.status === "PROCESSING" && (
-                                <button className="rounded-lg bg-purple-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-600">
+                                <button
+                                  onClick={() => handleStatusChange(order.id, "SHIPPED")}
+                                  className="rounded-lg bg-purple-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-600 transition-colors"
+                                >
                                   Відправити
+                                </button>
+                              )}
+                              {order.status === "SHIPPED" && (
+                                <button
+                                  onClick={() => handleStatusChange(order.id, "DELIVERED")}
+                                  className="rounded-lg bg-green-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-600 transition-colors"
+                                >
+                                  Доставлено
                                 </button>
                               )}
                             </div>
@@ -349,7 +232,7 @@ export default function AdminOrdersPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
