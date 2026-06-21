@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,7 +18,6 @@ import {
   Share2,
 } from "lucide-react";
 import { products, formatPrice, getAverageRating } from "@/lib/data";
-import type { Product } from "@/lib/types";
 import { useCartStore } from "@/lib/store";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -26,6 +25,7 @@ import toast from "react-hot-toast";
 
 export default function ProductPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
   const product = products.find((p) => p.slug === slug);
@@ -98,7 +98,7 @@ export default function ProductPage() {
 
   const handleBuyNow = () => {
     handleAddToCart();
-    window.location.href = "/cart";
+    router.push("/cart");
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {

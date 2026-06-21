@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Plus, Edit2, Trash2, Eye, EyeOff, Upload, GripVertical } from "lucide-react";
-import { banners } from "@/lib/data";
 
 interface BannerData {
   id: string;

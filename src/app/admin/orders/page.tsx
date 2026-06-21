@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Eye, ChevronUp } from "lucide-react";
 import { formatPrice } from "@/lib/data";
 
 type OrderStatus = "NEW" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";

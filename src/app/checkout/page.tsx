@@ -60,7 +60,6 @@ const paymentMethods = [
 export default function CheckoutPage() {
   const {
     items,
-    promoCode,
     discount,
     getTotal,
     getShippingCost,
@@ -92,7 +91,7 @@ export default function CheckoutPage() {
   const selectedDelivery = watch("deliveryMethod");
   const selectedPayment = watch("paymentMethod");
 
-  const onSubmit = async (data: CheckoutFormData) => {
+  const onSubmit = async () => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     const num = Math.floor(10000 + Math.random() * 90000).toString();
     setOrderNumber(num);

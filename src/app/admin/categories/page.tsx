@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Edit2, Trash2, Plus, ChevronRight } from "lucide-react";
 import { categories, products } from "@/lib/data";
 

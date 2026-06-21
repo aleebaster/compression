@@ -8,13 +8,13 @@ import {
   ChevronDown,
   ChevronRight,
   Home,
-  Search,
   PackageOpen,
 } from "lucide-react";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
-import { products, categories, brands } from "@/lib/data";
+import { products, brands } from "@/lib/data";
 import type { Product } from "@/lib/types";
 
 type SortKey = "popular" | "price-asc" | "price-desc" | "newest" | "rating";
@@ -430,10 +430,10 @@ export default function CatalogPage() {
         <div className="border-b border-gray-100">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
             <nav className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-              <a href="/" className="flex items-center gap-1 hover:text-[#E31837] transition-colors">
+              <Link href="/" className="flex items-center gap-1 hover:text-[#E31837] transition-colors">
                 <Home className="h-3.5 w-3.5" />
                 Головна
-              </a>
+              </Link>
               <ChevronRight className="h-3.5 w-3.5" />
               <span className="text-gray-900 font-medium">Каталог</span>
             </nav>

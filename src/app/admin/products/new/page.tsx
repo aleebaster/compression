@@ -11,7 +11,6 @@ import {
   X,
   Plus,
   Trash2,
-  GripVertical,
 } from "lucide-react";
 import { categories, brands } from "@/lib/data";
 

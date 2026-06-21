@@ -40,28 +40,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       }}
     >
       <Link href={`/product/${product.slug}`} className="block group">
-        <div
-          className="relative rounded-xl overflow-hidden bg-white transition-all duration-400"
-          style={{
-            transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
-            transitionDuration: "0.4s",
-          }}
-        >
-          {/* Hover lift applied via group-hover */}
-          <style>{`
-            .product-card-hover:hover {
-              transform: translateY(-8px);
-              box-shadow:
-                0 20px 40px -12px rgba(0, 0, 0, 0.15),
-                0 8px 16px -8px rgba(0, 0, 0, 0.1);
-            }
-          `}</style>
-          <div className="product-card-hover transition-all duration-400 rounded-xl"
-            style={{
-              transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
-              transitionDuration: "0.4s",
-            }}
-          >
+        <div className="relative rounded-xl overflow-hidden bg-white shadow-sm ring-1 ring-gray-100 transition-all duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-gray-200/50">
             {/* Image container */}
             <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
               <Image
@@ -169,7 +148,6 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                 </button>
               </div>
             </div>
-          </div>
         </div>
       </Link>
     </motion.div>
