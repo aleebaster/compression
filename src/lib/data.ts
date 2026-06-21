@@ -16,20 +16,6 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: "2",
-    name: "Жіночий компресійний одяг",
-    slug: "women",
-    description: "Компресійний одяг для жінок",
-    image: "https://picsum.photos/seed/women-category/600/400",
-    children: [
-      { id: "2-1", name: "Футболки", slug: "women-tshirts", parentId: "2" },
-      { id: "2-2", name: "Легінси", slug: "women-leggings", parentId: "2" },
-      { id: "2-3", name: "Шорти", slug: "women-shorts", parentId: "2" },
-      { id: "2-4", name: "Топи", slug: "women-tops", parentId: "2" },
-      { id: "2-5", name: "Комплекти", slug: "women-sets", parentId: "2" },
-    ],
-  },
-  {
     id: "3",
     name: "Дитячий компресійний одяг",
     slug: "kids",
@@ -41,13 +27,6 @@ export const categories: Category[] = [
       { id: "3-3", name: "Легінси", slug: "kids-leggings", parentId: "3" },
       { id: "3-4", name: "Комплекти", slug: "kids-sets", parentId: "3" },
     ],
-  },
-  {
-    id: "4",
-    name: "Термобілизна",
-    slug: "thermal",
-    description: "Термокомпресійна білизна",
-    image: "https://picsum.photos/seed/thermal-category/600/400",
   },
 ];
 

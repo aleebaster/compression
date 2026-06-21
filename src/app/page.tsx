@@ -35,12 +35,6 @@ const categories = [
     description: "Компресійний одяг для чоловіків",
   },
   {
-    title: "Жіночий",
-    slug: "women",
-    gradient: "linear-gradient(135deg, #1f2937 0%, #4c0519 100%)",
-    description: "Компресійний одяг для жінок",
-  },
-  {
     title: "Дитячий",
     slug: "kids",
     gradient: "linear-gradient(135deg, #1f2937 0%, #1e3a5f 100%)",

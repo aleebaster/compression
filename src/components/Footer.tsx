@@ -15,10 +15,9 @@ const navLinks = [
   {
     title: "Каталог",
     links: [
+      { label: "Новинки", href: "/new" },
       { label: "Чоловічий", href: "/catalog/men" },
-      { label: "Жіночий", href: "/catalog/women" },
       { label: "Дитячий", href: "/catalog/kids" },
-      { label: "Термобілизна", href: "/catalog/thermal" },
     ],
   },
   {

@@ -31,9 +31,8 @@ interface Filters {
 const genderOptions = [
   { value: "", label: "Всі" },
   { value: "MEN", label: "Чоловічий" },
-  { value: "WOMEN", label: "Жіночий" },
   { value: "KIDS", label: "Дитячий" },
-  { value: "THERMAL", label: "Термобілизна" },
+  { value: "UNISEX", label: "Унісекс" },
 ];
 
 const sizeOptions = ["S", "M", "L", "XL", "XXL"];

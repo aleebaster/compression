@@ -9,10 +9,9 @@ import { categories } from "@/lib/data";
 import Logo from "@/components/Logo";
 
 const navLinks = [
+  { label: "Новинки", href: "/new" },
   { label: "Чоловічий", href: "/category/men" },
-  { label: "Жіночий", href: "/category/women" },
   { label: "Дитячий", href: "/category/kids" },
-  { label: "Термобілизна", href: "/category/thermal" },
   { label: "Всі товари", href: "/catalog" },
 ];
 
@@ -56,9 +55,7 @@ export default function Header() {
   const getCategorySlug = (label: string): string | null => {
     const map: Record<string, string> = {
       Чоловічий: "men",
-      Жіночий: "women",
       Дитячий: "kids",
-      Термобілизна: "thermal",
     };
     return map[label] ?? null;
   };

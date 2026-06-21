@@ -18,13 +18,6 @@ function getVal(v: { desktop?: number | string; tablet?: number | string; mobile
   return fallback;
 }
 
-function getStrVal(v: { desktop?: number | string; tablet?: number | string; mobile?: number | string } | undefined, device: "mobile" | "tablet" | "desktop", fallback: string): string {
-  const val = v?.[device];
-  if (typeof val === "string") return val;
-  if (typeof val === "number") return `${val}px`;
-  return fallback;
-}
-
 function getBoolVal(v: { desktop?: boolean; tablet?: boolean; mobile?: boolean } | undefined, device: "mobile" | "tablet" | "desktop", fallback: boolean): boolean {
   if (!v) return fallback;
   const val = v[device];

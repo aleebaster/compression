@@ -17,7 +17,6 @@ import { categories, brands } from "@/lib/data";
 const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
 const genderOptions = [
   { value: "MEN", label: "Чоловічий" },
-  { value: "WOMEN", label: "Жіночий" },
   { value: "KIDS", label: "Дитячий" },
   { value: "UNISEX", label: "Унісекс" },
 ];

@@ -84,12 +84,7 @@ async function main() {
     update: {},
     create: { name: "Чоловічий", slug: "men", description: "Компресійний одяг для чоловіків" },
   });
-  const womenCategory = await prisma.category.upsert({
-    where: { slug: "women" },
-    update: {},
-    create: { name: "Жіночий", slug: "women", description: "Компресійний одяг для жінок" },
-  });
-  const kidsCategory = await prisma.category.upsert({
+  await prisma.category.upsert({
     where: { slug: "kids" },
     update: {},
     create: { name: "Дитячий", slug: "kids", description: "Компресійний одяг для дітей" },
