@@ -1,45 +1,71 @@
 import { NextRequest, NextResponse } from "next/server";
-import { products } from "@/lib/data";
+import { prisma } from "@/lib/db";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not connected" }, { status: 503 });
+    }
     const { id } = await params;
-    const product = products.find((p) => p.id === id);
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        images: true,
+        sizes: true,
+        colors: true,
+        category: true,
+        brand: true,
+      },
+    });
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
     return NextResponse.json(product);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to fetch product" },
-      { status: 500 }
-    );
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch product" }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+async function updateProduct(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not connected" }, { status: 503 });
+    }
     const { id } = await params;
     const body = await request.json();
-    const index = products.findIndex((p) => p.id === id);
-    if (index === -1) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
-    products[index] = { ...products[index], ...body, updatedAt: new Date() };
-    console.log(`[PRODUCT] Updated ${id}:`, products[index]);
-    return NextResponse.json(products[index]);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to update product" },
-      { status: 500 }
-    );
+    const { images, sizes, colors, ...productData } = body;
+
+    const product = await prisma.product.update({
+      where: { id },
+      data: {
+        ...productData,
+        images: images ? { deleteMany: {}, create: images } : undefined,
+        sizes: sizes ? { deleteMany: {}, create: sizes } : undefined,
+        colors: colors ? { deleteMany: {}, create: colors } : undefined,
+      },
+      include: {
+        images: true,
+        sizes: true,
+        colors: true,
+        category: true,
+        brand: true,
+      },
+    });
+    return NextResponse.json(product);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
   }
+}
+
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  return updateProduct(request, context);
+}
+
+export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  return updateProduct(request, context);
 }
 
 export async function DELETE(
@@ -47,18 +73,13 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const index = products.findIndex((p) => p.id === id);
-    if (index === -1) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not connected" }, { status: 503 });
     }
-    const deleted = products.splice(index, 1)[0];
-    console.log(`[PRODUCT] Deleted ${id}:`, deleted);
-    return NextResponse.json({ success: true, product: deleted });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to delete product" },
-      { status: 500 }
-    );
+    const { id } = await params;
+    await prisma.product.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
   }
 }

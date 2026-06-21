@@ -1,44 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { EmailConfig } from "@/lib/email";
-import { defaultEmailConfig } from "@/lib/email";
-
-interface AdminSettings {
-  storeName: string;
-  storeEmail: string;
-  storePhone: string;
-  storeAddress: string;
-  emailConfig: EmailConfig;
-}
-
-const settings: AdminSettings = {
-  storeName: "COMPEX Store",
-  storeEmail: "info@compex.ua",
-  storePhone: "+380 67 123 4567",
-  storeAddress: "м. Київ, вул. Спортивна, 1",
-  emailConfig: { ...defaultEmailConfig },
-};
+import { prisma } from "@/lib/db";
 
 export async function GET() {
   try {
-    return NextResponse.json(settings);
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to load settings" },
-      { status: 500 }
-    );
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not connected" }, { status: 503 });
+    }
+    const settings = await prisma.settings.findMany();
+    const settingsMap: Record<string, string> = {};
+    settings.forEach((s: { key: string; value: string }) => { settingsMap[s.key] = s.value; });
+    return NextResponse.json(settingsMap);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch settings" }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    Object.assign(settings, body);
-    console.log("[SETTINGS] Updated:", settings);
-    return NextResponse.json({ success: true, settings });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to save settings" },
-      { status: 500 }
+    if (!prisma) {
+      return NextResponse.json({ error: "Database not connected" }, { status: 503 });
+    }
+    const { settings } = await request.json();
+    const upserts = Object.entries(settings).map(([key, value]) =>
+      prisma!.settings.upsert({
+        where: { key },
+        update: { value: value as string },
+        create: { key, value: value as string },
+      })
     );
+    await Promise.all(upserts);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to save settings" }, { status: 500 });
   }
 }

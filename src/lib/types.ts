@@ -117,23 +117,63 @@ export interface CartItem {
   product: Product;
 }
 
+export interface DeviceValue {
+  desktop: number | string;
+  tablet: number | string;
+  mobile: number | string;
+}
+
+export interface OverlaySettings {
+  enabled: boolean;
+  color: string;
+  opacity: number;
+  gradientEnabled: boolean;
+  gradientDirection: string;
+}
+
 export interface Banner {
   id: string;
-  title: string;
+  title?: string;
   subtitle?: string;
+  description?: string;
+  buttonText?: string;
   link?: string;
   isActive: boolean;
   order: number;
-  desktopImage: string;
-  tabletImage: string;
-  mobileImage: string;
+  mode: "image_only" | "image_content" | "custom_layout";
+  useTextContent: boolean;
+  desktopImage?: string;
+  tabletImage?: string;
+  mobileImage?: string;
+  objectFit: "cover" | "contain" | "fill" | "none";
   positionX: number;
   positionY: number;
   objectPosition: string;
   scale: number;
-  heightDesktop: number;
-  heightTablet: number;
-  heightMobile: number;
+  width: DeviceValue;
+  height: DeviceValue;
+  maxWidth: DeviceValue;
+  maxHeight: DeviceValue;
+  aspectRatio: DeviceValue;
+  fullWidth: { desktop: boolean; tablet: boolean; mobile: boolean };
+  fullHeight: { desktop: boolean; tablet: boolean; mobile: boolean };
+  margin: { desktop: DeviceValue; tablet: DeviceValue; mobile: DeviceValue };
+  padding: { desktop: DeviceValue; tablet: DeviceValue; mobile: DeviceValue };
+  overlay: OverlaySettings;
+}
+
+export interface HeroContent {
+  id: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  position: string;
+  textColor: string;
+  textShadow: boolean;
+  isActive: boolean;
+  order: number;
 }
 
 export interface PromoCode {

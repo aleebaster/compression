@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -200,15 +200,36 @@ model CartItem {
 }
 
 model Banner {
-  id        String   @id @default(cuid())
-  title     String
-  subtitle  String?
-  image     String
-  link      String?
-  isActive  Boolean  @default(true)
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(cuid())
+  title           String?
+  subtitle        String?
+  description     String?
+  buttonText      String?
+  link            String?
+  isActive        Boolean  @default(true)
+  order           Int      @default(0)
+  mode            String   @default("image_only")
+  useTextContent  Boolean  @default(false)
+  desktopImage    String?
+  tabletImage     String?
+  mobileImage     String?
+  objectFit       String   @default("cover")
+  positionX       Float    @default(0)
+  positionY       Float    @default(0)
+  objectPosition  String   @default("center")
+  scale           Float    @default(1)
+  width           Json     @default("{}")
+  height          Json     @default("{}")
+  maxWidth        Json     @default("{}")
+  maxHeight       Json     @default("{}")
+  aspectRatio     Json     @default("{}")
+  fullWidth       Json     @default("{}")
+  fullHeight      Json     @default("{}")
+  margin          Json     @default("{}")
+  padding         Json     @default("{}")
+  overlay         Json     @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model PromoCode {
@@ -227,4 +248,20 @@ model Settings {
   id    String @id @default(cuid())
   key   String @unique
   value String
+}
+
+model HeroContent {
+  id            String   @id @default(cuid())
+  title         String?
+  subtitle      String?
+  description   String?
+  buttonText    String?
+  buttonLink    String?
+  position      String   @default("center")
+  textColor     String   @default("#FFFFFF")
+  textShadow    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

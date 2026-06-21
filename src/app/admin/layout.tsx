@@ -18,8 +18,9 @@ import {
   LogOut,
   Bell,
   Search,
+  Type,
 } from "lucide-react";
-import { useAdminAuth } from "@/lib/admin-store";
+import { useAdminAuth, useAdminProducts, useAdminOrders, useAdminCategories, useAdminBanners, useAdminReviews, useAdminSettings, useAdminHeroContent } from "@/lib/admin-store";
 import Logo from "@/components/Logo";
 
 const navItems = [
@@ -28,6 +29,7 @@ const navItems = [
   { label: "Категорії", href: "/admin/categories", icon: Tag },
   { label: "Замовлення", href: "/admin/orders", icon: ShoppingCart },
   { label: "Банери", href: "/admin/banners", icon: Image },
+  { label: "Hero Текст", href: "/admin/hero-content", icon: Type },
   { label: "Відгуки", href: "/admin/reviews", icon: Star },
   { label: "Налаштування", href: "/admin/settings", icon: Settings },
 ];
@@ -39,6 +41,7 @@ const pageTitles: Record<string, string> = {
   "/admin/categories": "Категорії",
   "/admin/orders": "Замовлення",
   "/admin/banners": "Банери",
+  "/admin/hero-content": "Hero Текст",
   "/admin/reviews": "Відгуки",
   "/admin/settings": "Налаштування",
 };
@@ -52,12 +55,31 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAdminAuth();
+  const { load: loadProducts } = useAdminProducts();
+  const { load: loadOrders } = useAdminOrders();
+  const { load: loadCategories } = useAdminCategories();
+  const { load: loadBanners } = useAdminBanners();
+  const { load: loadHeroContent } = useAdminHeroContent();
+  const { load: loadReviews } = useAdminReviews();
+  const { load: loadSettings } = useAdminSettings();
 
   useEffect(() => {
     if (!isAuthenticated && pathname !== "/admin/login") {
       router.push("/admin/login");
     }
   }, [isAuthenticated, pathname, router]);
+
+  useEffect(() => {
+    if (isAuthenticated && pathname !== "/admin/login") {
+      loadProducts();
+      loadOrders();
+      loadCategories();
+      loadBanners();
+      loadHeroContent();
+      loadReviews();
+      loadSettings();
+    }
+  }, [isAuthenticated, pathname]);
 
   if (!isAuthenticated && pathname !== "/admin/login") {
     return null;
