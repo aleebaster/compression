@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
@@ -56,11 +55,12 @@ const slideIn = {
   },
 };
 
-const imageReveal = {
-  hidden: { opacity: 0, scale: 1.05 },
+const silhouetteReveal = {
+  hidden: { opacity: 0, scale: 0.92, y: 20 },
   visible: {
     opacity: 1,
     scale: 1,
+    y: 0,
     transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   },
 };
@@ -72,11 +72,45 @@ export default function HeroBanner() {
     offset: ["start start", "end start"],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
+  const silhouetteY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
     <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#0a0a0a]">
+      {/* Background patterns — pure CSS, no images */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* Base dark gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-[#1a1a1a]" />
+
+        {/* Diagonal lines pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.5) 40px, rgba(255,255,255,0.5) 41px)",
+          }}
+        />
+
+        {/* Dot pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        {/* Large red accent glow — top right */}
+        <div className="absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full bg-[#E31837]/[0.07] blur-[140px]" />
+
+        {/* Smaller red glow — bottom left */}
+        <div className="absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full bg-[#E31837]/[0.05] blur-[120px]" />
+
+        {/* Subtle white accent glow — center */}
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.02] blur-[100px]" />
+      </div>
+
       {/* Main hero */}
       <div className="relative mx-auto flex min-h-[600px] w-full max-w-[1440px] flex-col lg:min-h-[85vh] lg:flex-row">
         {/* LEFT COLUMN — Text content */}
@@ -95,7 +129,7 @@ export default function HeroBanner() {
             </span>
           </motion.div>
 
-          {/* Heading — NO text that duplicates the image */}
+          {/* Heading */}
           <motion.h1
             variants={slideIn}
             className="mb-5 text-[2rem] font-extrabold leading-[1.08] tracking-tight text-white sm:text-[2.75rem] md:text-[3.25rem] lg:text-[3.5rem] xl:text-[4rem]"
@@ -150,37 +184,95 @@ export default function HeroBanner() {
           </motion.div>
         </motion.div>
 
-        {/* RIGHT COLUMN — Image */}
+        {/* RIGHT COLUMN — CSS-only athlete silhouettes */}
         <motion.div
           className="relative w-full lg:w-[52%]"
-          variants={imageReveal}
+          variants={silhouetteReveal}
           initial="hidden"
           animate="visible"
         >
-          {/* Clean gradient background — replaces the image background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a0a0e] via-[#0f0f0f] to-[#0a0a0a]" />
-
-          {/* Subtle red accent glow */}
-          <div className="absolute -left-20 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-[#E31837]/8 blur-[100px]" />
-
-          {/* The banner image — positioned to show only the people, text area covered */}
           <motion.div
             className="relative h-[400px] w-full sm:h-[500px] lg:h-full lg:min-h-[600px]"
-            style={{ y: imageY }}
+            style={{ y: silhouetteY }}
           >
-            <Image
-              src="/hero-banner.png"
-              alt="Компресійний одяг для дорослих та дітей"
-              fill
-              sizes="(max-width: 1024px) 100vw, 52vw"
-              priority
-              className="object-cover object-left-top sm:object-left"
-              style={{ objectPosition: "70% 10%" }}
-            />
-            {/* Gradient to blend image edges into background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-transparent lg:from-[#0a0a0a] lg:via-[#0a0a0a]/30" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/40" />
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+            {/* Red glow behind silhouettes */}
+            <div className="absolute left-1/2 top-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E31837]/[0.12] blur-[100px]" />
+            <div className="absolute left-[45%] top-[40%] h-[200px] w-[200px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E31837]/[0.08] blur-[80px]" />
+
+            {/* Adult athlete silhouette */}
+            <div className="absolute left-1/2 top-[12%] -translate-x-[65%] sm:left-[42%] sm:top-[10%]">
+              {/* Head */}
+              <div className="relative mb-1 ml-[38px] h-[42px] w-[42px] rounded-full bg-gradient-to-b from-white/20 to-white/5 shadow-[0_0_30px_rgba(227,24,55,0.15)]" />
+              {/* Neck */}
+              <div className="mx-auto h-[10px] w-[16px] bg-gradient-to-b from-white/15 to-white/5" />
+              {/* Torso */}
+              <div className="relative mx-auto h-[130px] w-[90px] overflow-hidden rounded-t-3xl bg-gradient-to-b from-white/12 to-white/[0.04] shadow-[0_0_40px_rgba(227,24,55,0.1)]">
+                {/* Compression lines on torso */}
+                <div className="absolute left-0 right-0 top-[20px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/30 to-transparent" />
+                <div className="absolute left-0 right-0 top-[45px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/25 to-transparent" />
+                <div className="absolute left-0 right-0 top-[70px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/20 to-transparent" />
+                <div className="absolute left-0 right-0 top-[95px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+                {/* Side compression panels */}
+                <div className="absolute bottom-0 left-0 top-0 w-[12px] bg-gradient-to-r from-[#E31837]/15 to-transparent" />
+                <div className="absolute bottom-0 right-0 top-0 w-[12px] bg-gradient-to-l from-[#E31837]/15 to-transparent" />
+              </div>
+              {/* Arms */}
+              <div className="absolute left-[-18px] top-[56px] h-[110px] w-[22px] -rotate-12 rounded-full bg-gradient-to-b from-white/10 to-white/[0.03]" />
+              <div className="absolute right-[-18px] top-[56px] h-[110px] w-[22px] rotate-12 rounded-full bg-gradient-to-b from-white/10 to-white/[0.03]" />
+              {/* Legs */}
+              <div className="mx-auto flex gap-[6px]">
+                <div className="h-[150px] w-[36px] rounded-b-2xl rounded-t-lg bg-gradient-to-b from-white/10 to-white/[0.03]">
+                  <div className="absolute bottom-[40px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/20 to-transparent" />
+                  <div className="absolute bottom-[80px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+                </div>
+                <div className="h-[150px] w-[36px] rounded-b-2xl rounded-t-lg bg-gradient-to-b from-white/10 to-white/[0.03]">
+                  <div className="absolute bottom-[40px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/20 to-transparent" />
+                  <div className="absolute bottom-[80px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+                </div>
+              </div>
+            </div>
+
+            {/* Child athlete silhouette — slightly behind and to the right */}
+            <div className="absolute left-1/2 top-[28%] -translate-x-[15%] sm:left-[58%] sm:top-[22%]">
+              {/* Head */}
+              <div className="relative mb-1 ml-[30px] h-[34px] w-[34px] rounded-full bg-gradient-to-b from-white/15 to-white/[0.04] shadow-[0_0_20px_rgba(227,24,55,0.1)]" />
+              {/* Neck */}
+              <div className="mx-auto h-[8px] w-[12px] bg-gradient-to-b from-white/10 to-white/[0.03]" />
+              {/* Torso */}
+              <div className="relative mx-auto h-[100px] w-[70px] overflow-hidden rounded-t-2xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-[0_0_30px_rgba(227,24,55,0.08)]">
+                {/* Compression lines */}
+                <div className="absolute left-0 right-0 top-[16px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/20 to-transparent" />
+                <div className="absolute left-0 right-0 top-[36px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+                <div className="absolute left-0 right-0 top-[56px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/12 to-transparent" />
+                <div className="absolute left-0 right-0 top-[76px] h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/10 to-transparent" />
+                {/* Side panels */}
+                <div className="absolute bottom-0 left-0 top-0 w-[10px] bg-gradient-to-r from-[#E31837]/10 to-transparent" />
+                <div className="absolute bottom-0 right-0 top-0 w-[10px] bg-gradient-to-l from-[#E31837]/10 to-transparent" />
+              </div>
+              {/* Arms */}
+              <div className="absolute left-[-14px] top-[44px] h-[85px] w-[18px] -rotate-12 rounded-full bg-gradient-to-b from-white/[0.08] to-white/[0.02]" />
+              <div className="absolute right-[-14px] top-[44px] h-[85px] w-[18px] rotate-12 rounded-full bg-gradient-to-b from-white/[0.08] to-white/[0.02]" />
+              {/* Legs */}
+              <div className="mx-auto flex gap-[5px]">
+                <div className="h-[120px] w-[28px] rounded-b-xl rounded-t-md bg-gradient-to-b from-white/[0.08] to-white/[0.02]">
+                  <div className="absolute bottom-[32px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+                  <div className="absolute bottom-[64px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/12 to-transparent" />
+                </div>
+                <div className="h-[120px] w-[28px] rounded-b-xl rounded-t-md bg-gradient-to-b from-white/[0.08] to-white/[0.02]">
+                  <div className="absolute bottom-[32px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+                  <div className="absolute bottom-[64px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#E31837]/12 to-transparent" />
+                </div>
+              </div>
+            </div>
+
+            {/* Abstract compression garment accent lines — floating */}
+            <div className="absolute bottom-[15%] left-[15%] h-[1px] w-[120px] rotate-[25deg] bg-gradient-to-r from-transparent via-[#E31837]/25 to-transparent" />
+            <div className="absolute bottom-[22%] left-[20%] h-[1px] w-[80px] rotate-[20deg] bg-gradient-to-r from-transparent via-[#E31837]/15 to-transparent" />
+            <div className="absolute top-[18%] right-[12%] h-[1px] w-[100px] rotate-[-15deg] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+            {/* Red accent geometric shape */}
+            <div className="absolute bottom-[10%] right-[10%] h-[60px] w-[60px] rotate-45 border border-[#E31837]/20" />
+            <div className="absolute bottom-[12%] right-[12%] h-[44px] w-[44px] rotate-45 border border-[#E31837]/10" />
           </motion.div>
         </motion.div>
       </div>

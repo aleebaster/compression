@@ -6,7 +6,7 @@ export const categories: Category[] = [
     name: "Чоловічий компресійний одяг",
     slug: "men",
     description: "Компресійний одяг для чоловіків",
-    image: "/categories/men.jpg",
+    image: "https://picsum.photos/seed/men-category/600/400",
     children: [
       { id: "1-1", name: "Футболки", slug: "men-tshirts", parentId: "1" },
       { id: "1-2", name: "Шорти", slug: "men-shorts", parentId: "1" },
@@ -20,7 +20,7 @@ export const categories: Category[] = [
     name: "Жіночий компресійний одяг",
     slug: "women",
     description: "Компресійний одяг для жінок",
-    image: "/categories/women.jpg",
+    image: "https://picsum.photos/seed/women-category/600/400",
     children: [
       { id: "2-1", name: "Футболки", slug: "women-tshirts", parentId: "2" },
       { id: "2-2", name: "Легінси", slug: "women-leggings", parentId: "2" },
@@ -34,7 +34,7 @@ export const categories: Category[] = [
     name: "Дитячий компресійний одяг",
     slug: "kids",
     description: "Компресійний одяг для дітей",
-    image: "/categories/kids.jpg",
+    image: "https://picsum.photos/seed/kids-category/600/400",
     children: [
       { id: "3-1", name: "Футболки", slug: "kids-tshirts", parentId: "3" },
       { id: "3-2", name: "Шорти", slug: "kids-shorts", parentId: "3" },
@@ -47,7 +47,7 @@ export const categories: Category[] = [
     name: "Термобілизна",
     slug: "thermal",
     description: "Термокомпресійна білизна",
-    image: "/categories/thermal.jpg",
+    image: "https://picsum.photos/seed/thermal-category/600/400",
   },
 ];
 
@@ -57,14 +57,48 @@ export const brands: Brand[] = [
   { id: "b3", name: "FitWear", slug: "fitwear" },
 ];
 
-const productImages = [
-  "/products/product-1.jpg",
-  "/products/product-2.jpg",
-  "/products/product-3.jpg",
-  "/products/product-4.jpg",
-  "/products/product-5.jpg",
-  "/products/product-6.jpg",
-];
+const productImages: Record<string, string[]> = {
+  p1: [
+    "https://picsum.photos/seed/compex-pro-1/600/800",
+    "https://picsum.photos/seed/compex-pro-1b/600/800",
+    "https://picsum.photos/seed/compex-pro-1c/600/800",
+  ],
+  p2: [
+    "https://picsum.photos/seed/compex-elite-2/600/800",
+    "https://picsum.photos/seed/compex-elite-2b/600/800",
+    "https://picsum.photos/seed/compex-elite-2c/600/800",
+  ],
+  p3: [
+    "https://picsum.photos/seed/compex-rash-3/600/800",
+    "https://picsum.photos/seed/compex-rash-3b/600/800",
+    "https://picsum.photos/seed/compex-rash-3c/600/800",
+  ],
+  p4: [
+    "https://picsum.photos/seed/compex-flex-4/600/800",
+    "https://picsum.photos/seed/compex-flex-4b/600/800",
+    "https://picsum.photos/seed/compex-flex-4c/600/800",
+  ],
+  p5: [
+    "https://picsum.photos/seed/compex-power-5/600/800",
+    "https://picsum.photos/seed/compex-power-5b/600/800",
+    "https://picsum.photos/seed/compex-power-5c/600/800",
+  ],
+  p6: [
+    "https://picsum.photos/seed/compex-junior-6/600/800",
+    "https://picsum.photos/seed/compex-junior-6b/600/800",
+    "https://picsum.photos/seed/compex-junior-6c/600/800",
+  ],
+  p7: [
+    "https://picsum.photos/seed/compex-thermo-7/600/800",
+    "https://picsum.photos/seed/compex-thermo-7b/600/800",
+    "https://picsum.photos/seed/compex-thermo-7c/600/800",
+  ],
+  p8: [
+    "https://picsum.photos/seed/compex-apex-8/600/800",
+    "https://picsum.photos/seed/compex-apex-8b/600/800",
+    "https://picsum.photos/seed/compex-apex-8c/600/800",
+  ],
+};
 
 export const products: Product[] = [
   {
@@ -87,7 +121,7 @@ export const products: Product[] = [
     category: categories[0],
     brandId: "b1",
     brand: brands[0],
-    images: productImages.slice(0, 3).map((url, i) => ({
+    images: productImages.p1.map((url, i) => ({
       id: `img-p1-${i}`,
       url,
       alt: `Компресійна футболка Pro Max - фото ${i + 1}`,
@@ -154,7 +188,7 @@ export const products: Product[] = [
     category: categories[0],
     brandId: "b2",
     brand: brands[1],
-    images: productImages.slice(1, 4).map((url, i) => ({
+    images: productImages.p2.map((url, i) => ({
       id: `img-p2-${i}`,
       url,
       alt: `Компресійні шорти Elite - фото ${i + 1}`,
@@ -195,7 +229,7 @@ export const products: Product[] = [
     category: categories[0],
     brandId: "b1",
     brand: brands[0],
-    images: productImages.slice(2, 5).map((url, i) => ({
+    images: productImages.p3.map((url, i) => ({
       id: `img-p3-${i}`,
       url,
       alt: `Рашгард Pro Compression - фото ${i + 1}`,
@@ -249,7 +283,7 @@ export const products: Product[] = [
     category: categories[1],
     brandId: "b3",
     brand: brands[2],
-    images: productImages.slice(0, 3).map((url, i) => ({
+    images: productImages.p4.map((url, i) => ({
       id: `img-p4-${i}`,
       url,
       alt: `Жіночі компресійні легінси Flex - фото ${i + 1}`,
@@ -292,7 +326,7 @@ export const products: Product[] = [
     category: categories[1],
     brandId: "b3",
     brand: brands[2],
-    images: productImages.slice(1, 4).map((url, i) => ({
+    images: productImages.p5.map((url, i) => ({
       id: `img-p5-${i}`,
       url,
       alt: `Жіночий компресійний топ Power - фото ${i + 1}`,
@@ -332,7 +366,7 @@ export const products: Product[] = [
     category: categories[2],
     brandId: "b2",
     brand: brands[1],
-    images: productImages.slice(2, 5).map((url, i) => ({
+    images: productImages.p6.map((url, i) => ({
       id: `img-p6-${i}`,
       url,
       alt: `Дитяча компресійна футболка Junior - фото ${i + 1}`,
@@ -372,7 +406,7 @@ export const products: Product[] = [
     category: categories[3],
     brandId: "b1",
     brand: brands[0],
-    images: productImages.slice(0, 3).map((url, i) => ({
+    images: productImages.p7.map((url, i) => ({
       id: `img-p7-${i}`,
       url,
       alt: `Термокомпресійна футболка Thermo - фото ${i + 1}`,
@@ -413,7 +447,7 @@ export const products: Product[] = [
     category: categories[0],
     brandId: "b1",
     brand: brands[0],
-    images: productImages.slice(3, 6).map((url, i) => ({
+    images: productImages.p8.map((url, i) => ({
       id: `img-p8-${i}`,
       url,
       alt: `Чоловічий компресійний комплект Apex - фото ${i + 1}`,
@@ -454,7 +488,7 @@ export const banners: Banner[] = [
     id: "b1",
     title: "Компресійний одяг для твого тренування",
     subtitle: "Преміальна якість для дорослих та дітей",
-    image: "/hero-banner.png",
+    image: "",
     link: "/catalog",
     isActive: true,
     order: 0,

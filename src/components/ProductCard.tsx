@@ -44,7 +44,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             {/* Image container */}
             <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
               <Image
-                src={product.images[0]?.url || "/placeholder.png"}
+                src={product.images[0]?.url || "https://picsum.photos/seed/placeholder/600/800"}
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

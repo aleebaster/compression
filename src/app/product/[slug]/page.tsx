@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -21,6 +20,7 @@ import { products, formatPrice, getAverageRating } from "@/lib/data";
 import { useCartStore } from "@/lib/store";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import OptimizedImage from "@/components/OptimizedImage";
 import toast from "react-hot-toast";
 
 export default function ProductPage() {
@@ -41,8 +41,6 @@ export default function ProductPage() {
   const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews">(
     "description"
   );
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
   const { addItem } = useCartStore();
 
@@ -99,13 +97,6 @@ export default function ProductPage() {
   const handleBuyNow = () => {
     handleAddToCart();
     router.push("/cart");
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setZoomPosition({ x, y });
   };
 
   const tabs = [
@@ -165,10 +156,7 @@ export default function ProductPage() {
             <div className="space-y-4">
               {/* Main Image */}
               <motion.div
-                className="relative aspect-square overflow-hidden rounded-2xl bg-white shadow-lg cursor-crosshair"
-                onMouseEnter={() => setIsZoomed(true)}
-                onMouseLeave={() => setIsZoomed(false)}
-                onMouseMove={handleMouseMove}
+                className="relative aspect-square overflow-hidden rounded-2xl bg-white shadow-lg"
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -179,20 +167,13 @@ export default function ProductPage() {
                     transition={{ duration: 0.3 }}
                     className="relative h-full w-full"
                   >
-                    <Image
-                      src={product.images[selectedImage]?.url || "/placeholder.jpg"}
+                    <OptimizedImage
+                      src={product.images[selectedImage]?.url || "https://picsum.photos/seed/placeholder/600/800"}
                       alt={product.images[selectedImage]?.alt || product.name}
                       fill
-                      className="object-cover transition-transform duration-200"
-                      style={
-                        isZoomed
-                          ? {
-                              transform: "scale(1.5)",
-                              transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                            }
-                          : {}
-                      }
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       priority
+                      className="object-cover transition-transform duration-200"
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -224,10 +205,11 @@ export default function ProductPage() {
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
-                    <Image
+                    <OptimizedImage
                       src={image.url}
                       alt={image.alt || `${product.name} - ${index + 1}`}
                       fill
+                      sizes="80px"
                       className="object-cover"
                     />
                   </button>
@@ -580,10 +562,11 @@ export default function ProductPage() {
                       className="overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-xl"
                     >
                       <div className="relative aspect-square overflow-hidden bg-gray-100">
-                        <Image
-                          src={relatedProduct.images[0]?.url || "/placeholder.jpg"}
+                        <OptimizedImage
+                          src={relatedProduct.images[0]?.url || "https://picsum.photos/seed/placeholder/600/800"}
                           alt={relatedProduct.name}
                           fill
+                          sizes="(max-width: 640px) 50vw, 25vw"
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                         {relatedProduct.isSale && relatedDiscount > 0 && (

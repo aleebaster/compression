@@ -31,19 +31,19 @@ const categories = [
   {
     title: "Чоловічий",
     slug: "men",
-    image: "/categories/men.jpg",
+    gradient: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
     description: "Компресійний одяг для чоловіків",
   },
   {
     title: "Жіночий",
     slug: "women",
-    image: "/categories/women.jpg",
+    gradient: "linear-gradient(135deg, #1f2937 0%, #4c0519 100%)",
     description: "Компресійний одяг для жінок",
   },
   {
     title: "Дитячий",
     slug: "kids",
-    image: "/categories/kids.jpg",
+    gradient: "linear-gradient(135deg, #1f2937 0%, #1e3a5f 100%)",
     description: "Компресійний одяг для дітей",
   },
 ];
@@ -131,7 +131,7 @@ export default function HomePage() {
                   >
                     <div
                       className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${cat.image})` }}
+                      style={{ background: cat.gradient }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                     <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-center">
