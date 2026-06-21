@@ -8,11 +8,10 @@ export const categories: Category[] = [
     description: "Компресійний одяг для чоловіків",
     image: "https://picsum.photos/seed/men-category/600/400",
     children: [
-      { id: "1-1", name: "Футболки", slug: "men-tshirts", parentId: "1" },
-      { id: "1-2", name: "Шорти", slug: "men-shorts", parentId: "1" },
-      { id: "1-3", name: "Легінси", slug: "men-leggings", parentId: "1" },
-      { id: "1-4", name: "Рашгарди", slug: "men-rashguards", parentId: "1" },
-      { id: "1-5", name: "Комплекти", slug: "men-sets", parentId: "1" },
+      { id: "1-1", name: "Комплект 2 в 1", slug: "men-2v1", parentId: "1" },
+      { id: "1-2", name: "Комплект 3 в 1", slug: "men-3v1", parentId: "1" },
+      { id: "1-3", name: "Комплект 4 в 1", slug: "men-4v1", parentId: "1" },
+      { id: "1-4", name: "Комплект 5 в 1", slug: "men-5v1", parentId: "1" },
     ],
   },
   {
@@ -22,10 +21,8 @@ export const categories: Category[] = [
     description: "Компресійний одяг для дітей",
     image: "https://picsum.photos/seed/kids-category/600/400",
     children: [
-      { id: "3-1", name: "Футболки", slug: "kids-tshirts", parentId: "3" },
-      { id: "3-2", name: "Шорти", slug: "kids-shorts", parentId: "3" },
-      { id: "3-3", name: "Легінси", slug: "kids-leggings", parentId: "3" },
-      { id: "3-4", name: "Комплекти", slug: "kids-sets", parentId: "3" },
+      { id: "3-1", name: "Комплект 3 в 1", slug: "kids-3v1", parentId: "3" },
+      { id: "3-2", name: "Комплект 4 в 1", slug: "kids-4v1", parentId: "3" },
     ],
   },
 ];

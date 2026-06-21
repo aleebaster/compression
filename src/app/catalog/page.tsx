@@ -118,9 +118,7 @@ export default function CatalogPage() {
   const filtered = useMemo(() => {
     let result = products.filter((p) => p.isActive);
 
-    if (filters.gender === "THERMAL") {
-      result = result.filter((p) => p.categoryId === "4");
-    } else if (filters.gender) {
+    if (filters.gender) {
       result = result.filter((p) => p.gender === filters.gender);
     }
 

@@ -16,8 +16,8 @@ const navLinks = [
     title: "Каталог",
     links: [
       { label: "Новинки", href: "/new" },
-      { label: "Чоловічий", href: "/catalog/men" },
-      { label: "Дитячий", href: "/catalog/kids" },
+      { label: "Чоловічий", href: "/category/men" },
+      { label: "Дитячий", href: "/category/kids" },
     ],
   },
   {
