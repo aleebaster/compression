@@ -406,9 +406,9 @@ export const useAdminBanners = create<AdminBannersState>()(
           const parsed = data.map((b: Record<string, unknown>) => ({
             ...b,
             width: typeof b.width === "string" ? JSON.parse(b.width) : b.width ?? { desktop: "100%", tablet: "100%", mobile: "100%" },
-            height: typeof b.height === "string" ? JSON.parse(b.height) : b.height ?? { desktop: 750, tablet: 650, mobile: 500 },
-            maxWidth: typeof b.maxWidth === "string" ? JSON.parse(b.maxWidth) : b.maxWidth ?? { desktop: 1440, tablet: 768, mobile: 375 },
-            maxHeight: typeof b.maxHeight === "string" ? JSON.parse(b.maxHeight) : b.maxHeight ?? { desktop: 900, tablet: 800, mobile: 700 },
+            height: typeof b.height === "string" ? JSON.parse(b.height) : b.height ?? { desktop: 750, tablet: 600, mobile: 700 },
+            maxWidth: typeof b.maxWidth === "string" ? JSON.parse(b.maxWidth) : b.maxWidth ?? { desktop: 1920, tablet: 1024, mobile: 375 },
+            maxHeight: typeof b.maxHeight === "string" ? JSON.parse(b.maxHeight) : b.maxHeight ?? { desktop: 750, tablet: 600, mobile: 700 },
             aspectRatio: typeof b.aspectRatio === "string" ? JSON.parse(b.aspectRatio) : b.aspectRatio ?? { desktop: "auto", tablet: "auto", mobile: "auto" },
             fullWidth: typeof b.fullWidth === "string" ? JSON.parse(b.fullWidth) : b.fullWidth ?? { desktop: true, tablet: true, mobile: true },
             fullHeight: typeof b.fullHeight === "string" ? JSON.parse(b.fullHeight) : b.fullHeight ?? { desktop: false, tablet: false, mobile: false },

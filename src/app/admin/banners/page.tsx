@@ -72,15 +72,15 @@ const defaultFormData: BannerFormData = {
   desktopImage: "",
   tabletImage: "",
   mobileImage: "",
-  objectFit: "cover",
+  objectFit: "contain",
   positionX: 0,
   positionY: 0,
   objectPosition: "center",
   scale: 1,
   width: { desktop: "100%", tablet: "100%", mobile: "100%" },
-  height: { desktop: 750, tablet: 650, mobile: 500 },
-  maxWidth: { desktop: 1440, tablet: 768, mobile: 375 },
-  maxHeight: { desktop: 900, tablet: 800, mobile: 700 },
+  height: { desktop: 750, tablet: 600, mobile: 700 },
+  maxWidth: { desktop: 1920, tablet: 1024, mobile: 375 },
+  maxHeight: { desktop: 750, tablet: 600, mobile: 700 },
   aspectRatio: { desktop: "auto", tablet: "auto", mobile: "auto" },
   fullWidth: { desktop: true, tablet: true, mobile: true },
   fullHeight: { desktop: false, tablet: false, mobile: false },
@@ -721,14 +721,14 @@ function ImagesTab({
         />
         <ImageUploadZone
           label="Tablet"
-          sublabel="Recommended 1024x650"
+          sublabel="Recommended 1024x600"
           image={formData.tabletImage}
           onUpload={(base64) => updateField("tabletImage", base64)}
           onRemove={() => updateField("tabletImage", "")}
         />
         <ImageUploadZone
           label="Mobile"
-          sublabel="Recommended 375x500"
+          sublabel="Recommended 375x700"
           image={formData.mobileImage}
           onUpload={(base64) => updateField("mobileImage", base64)}
           onRemove={() => updateField("mobileImage", "")}

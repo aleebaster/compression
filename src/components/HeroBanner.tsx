@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAdminBanners } from "@/lib/admin-store";
 
 function getDeviceKey(width: number): "mobile" | "tablet" | "desktop" {
@@ -25,7 +25,6 @@ function getBoolVal(v: { desktop?: boolean; tablet?: boolean; mobile?: boolean }
 }
 
 export default function HeroBanner() {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const { banners, load: loadBanners } = useAdminBanners();
 
   useEffect(() => {
@@ -53,47 +52,33 @@ export default function HeroBanner() {
     : "";
 
   const bannerHeight = activeBanner
-    ? getVal(activeBanner.height, device, device === "mobile" ? 500 : device === "tablet" ? 650 : 750)
+    ? getVal(activeBanner.height, device, device === "mobile" ? 700 : device === "tablet" ? 600 : 750)
     : 750;
 
   const bannerMaxW = activeBanner
-    ? getVal(activeBanner.maxWidth, device, 1440)
-    : 1440;
+    ? getVal(activeBanner.maxWidth, device, 1920)
+    : 1920;
 
   const isFullWidth = activeBanner ? getBoolVal(activeBanner.fullWidth, device, true) : true;
 
-  const imageStyle: React.CSSProperties = {};
+  const objectFit = activeBanner?.objectFit || "contain";
+  const objectPosition = activeBanner?.objectPosition || "center";
+
+  const imageStyle: React.CSSProperties = {
+    objectFit: objectFit as React.CSSProperties["objectFit"],
+    objectPosition: objectPosition as React.CSSProperties["objectPosition"],
+  };
+
   if (activeBanner) {
     const transforms: string[] = [];
     if (activeBanner.positionX) transforms.push(`translateX(${activeBanner.positionX}px)`);
     if (activeBanner.positionY) transforms.push(`translateY(${activeBanner.positionY}px)`);
     if (activeBanner.scale && activeBanner.scale !== 1) transforms.push(`scale(${activeBanner.scale})`);
     if (transforms.length > 0) imageStyle.transform = transforms.join(" ");
-    imageStyle.objectPosition = activeBanner.objectPosition || "center";
-    imageStyle.objectFit = activeBanner.objectFit || "cover";
   }
-
-  const overlayStyle: React.CSSProperties = {};
-  if (activeBanner?.overlay?.enabled) {
-    const o = activeBanner.overlay;
-    if (o.gradientEnabled) {
-      const dir = o.gradientDirection || "to bottom";
-      overlayStyle.background = `linear-gradient(${dir}, ${o.color}${Math.round((o.opacity || 0.5) * 255).toString(16).padStart(2, "0")}, transparent)`;
-    } else {
-      overlayStyle.backgroundColor = o.color;
-      overlayStyle.opacity = o.opacity ?? 0.5;
-    }
-  }
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
-    <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#0a0a0a]">
+    <section className="relative w-full overflow-hidden bg-[#0a0a0a]">
       {!bannerImage && (
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#111111] to-[#1a1a1a]" />
@@ -127,28 +112,29 @@ export default function HeroBanner() {
       >
         {bannerImage ? (
           <motion.div
-            className="relative h-full w-full overflow-hidden"
-            style={{ minHeight: `${bannerHeight}px`, y: imgY }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="relative w-full"
+            style={{ minHeight: `${bannerHeight}px` }}
           >
             <Image
               src={bannerImage}
               alt="Hero Banner"
-              fill
+              width={1920}
+              height={bannerHeight}
               sizes="100vw"
               priority
-              className="h-full w-full"
+              className="h-auto w-full"
               style={imageStyle}
               unoptimized
             />
-            {activeBanner?.overlay?.enabled && (
-              <div className="absolute inset-0" style={overlayStyle} />
-            )}
           </motion.div>
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex h-[500px] items-center justify-center sm:h-[650px] lg:h-[750px]"
+            className="flex h-[500px] items-center justify-center sm:h-[600px] lg:h-[750px]"
           >
             <div className="text-sm text-white/20">Завантажте банер через адмін панель</div>
           </motion.div>
