@@ -2,8 +2,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Політика конфіденційності | COMPEX",
-  description: "Політика конфіденційності інтернет-магазину компресійного одягу COMPEX.",
+  title: "Політика конфіденційності",
+  description: "Політика конфіденційності інтернет-магазину компресійного одягу.",
 };
 
 export default function PrivacyPage() {
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 Ця Політика конфіденційності визначає порядок збирання, використання, зберігання
                 та захисту персональних даних користувачів (далі — &laquo;Користувач&raquo;)
-                інтернет-магазину COMPEX, розташованого за адресою compex.ua.
+                інтернет-магазину, розташованого за адресою example.com.
               </p>
               <p className="mt-3">
                 Користуючись послугами нашого магазину, Ви підтверджуєте свою згоду з умовами
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
                 з нами:
               </p>
               <ul className="mt-3 list-disc space-y-2 pl-5">
-                <li>Email: info@compex.ua</li>
+                <li>Email: info@example.com</li>
                 <li>Телефон: +380 (XX) XXX-XX-XX</li>
               </ul>
             </section>

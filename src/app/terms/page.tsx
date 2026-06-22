@@ -2,8 +2,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Умови використання | COMPEX",
-  description: "Умови використання інтернет-магазину компресійного одягу COMPEX.",
+  title: "Умови використання",
+  description: "Умови використання інтернет-магазину компресійного одягу.",
 };
 
 export default function TermsPage() {
@@ -22,8 +22,8 @@ export default function TermsPage() {
               <h2 className="text-xl font-semibold text-gray-900">1. Загальні умови</h2>
               <p className="mt-3">
                 Ці Умови використання регулюють відносини між власником інтернет-магазину
-                COMPEX (далі — &laquo;Продавець&raquo;) та Користувачем (далі — &laquo;Покупець&raquo;)
-                у з&apos;вязку з використанням сайту compex.ua та придбанням товарів.
+                (далі — &laquo;Продавець&raquo;) та Користувачем (далі — &laquo;Покупець&raquo;)
+                у з&apos;вязку з використанням сайту та придбанням товарів.
               </p>
               <p className="mt-3">
                 Здійснюючи замовлення на нашому сайті, Ви підтверджуєте, що ознайомилися з цими
@@ -112,7 +112,7 @@ export default function TermsPage() {
               <h2 className="text-xl font-semibold text-gray-900">9. Контакти</h2>
               <p className="mt-3">За будь-яких питань звертайтеся:</p>
               <ul className="mt-3 list-disc space-y-2 pl-5">
-                <li>Email: info@compex.ua</li>
+                <li>Email: info@example.com</li>
                 <li>Телефон: +380 (XX) XXX-XX-XX</li>
               </ul>
             </section>

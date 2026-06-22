@@ -5,7 +5,6 @@ import {
   Camera,
   Globe,
   Send,
-  Play,
   Phone,
   Mail,
 } from "lucide-react";
@@ -32,19 +31,18 @@ const navLinks = [
   {
     title: "Про нас",
     links: [
-      { label: "Наша історія", href: "/about" },
-      { label: "Блог", href: "/blog" },
-      { label: "Кар'єра", href: "/careers" },
-      { label: "Співпраця", href: "/partners" },
+      { label: "Про нас", href: "/about" },
+      { label: "Контакти", href: "/contacts" },
+      { label: "Повернення", href: "/returns" },
+      { label: "Розмірна сітка", href: "/size-guide" },
     ],
   },
 ];
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com/compex", icon: Camera },
-  { label: "Facebook", href: "https://facebook.com/compex", icon: Globe },
-  { label: "Telegram", href: "https://t.me/compex", icon: Send },
-  { label: "YouTube", href: "https://youtube.com/@compex", icon: Play },
+  { label: "Instagram", href: "https://instagram.com", icon: Camera },
+  { label: "Facebook", href: "https://facebook.com", icon: Globe },
+  { label: "Telegram", href: "https://t.me", icon: Send },
 ];
 
 export default function Footer() {
@@ -116,20 +114,20 @@ export default function Footer() {
             <ul className="mt-4 space-y-3">
               <li>
                 <a
-                  href="tel:+380XXXXXXXXXX"
+                  href="tel:+380504967515"
                   className="flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-[#E31837]"
                 >
                   <Phone className="h-4 w-4 shrink-0" />
-                  +380 (XX) XXX-XX-XX
+                  +38 (050) 496-75-15
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@compex.ua"
+                  href="mailto:info@crossover.com.ua"
                   className="flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-[#E31837]"
                 >
                   <Mail className="h-4 w-4 shrink-0" />
-                  info@compex.ua
+                  crossover.info@gmail.com
                 </a>
               </li>
             </ul>
@@ -158,7 +156,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 sm:flex-row">
           <p className="text-xs text-neutral-500">
-            &copy; 2026 COMPEX. Усі права захищені.
+            &copy; 2026 Усі права захищені.
           </p>
           <div className="flex items-center gap-4 text-xs text-neutral-500">
             <Link

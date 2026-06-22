@@ -175,7 +175,7 @@ export default function AdminLayout({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{user?.name || "Admin"}</p>
-              <p className="text-xs text-gray-400 truncate">{user?.email || "admin@compex.ua"}</p>
+              <p className="text-xs text-gray-400 truncate">{user?.email || "admin@example.com"}</p>
             </div>
             <button onClick={handleLogout} className="text-gray-400 hover:text-white" title="Вийти">
               <LogOut className="h-4 w-4" />

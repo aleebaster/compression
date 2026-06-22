@@ -48,7 +48,7 @@ export default function Header() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
+      window.location.href = `/catalog?q=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
 
@@ -209,7 +209,7 @@ export default function Header() {
 
               {/* Search - Mobile */}
               <Link
-                href="/search"
+                href="/catalog"
                 className="flex h-10 w-10 items-center justify-center rounded-full text-gray-700 hover:bg-gray-100 hover:text-[#E31837] transition-colors sm:hidden"
                 aria-label="Пошук"
               >

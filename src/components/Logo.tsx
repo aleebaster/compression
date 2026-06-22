@@ -16,14 +16,14 @@ export default function Logo({ className = "", size = "md" }: LogoProps) {
   if (logoUrl) {
     return (
       <div className={`relative ${heights[size]} w-auto ${className}`}>
-        <Image src={logoUrl} alt="COMPEX" fill className="object-contain" unoptimized />
+        <Image src={logoUrl} alt="Logo" fill className="object-contain" unoptimized />
       </div>
     );
   }
 
   return (
     <span className={`text-xl font-bold tracking-tight ${size === "lg" ? "text-2xl" : ""} ${className}`}>
-      COMP<span className="text-[#E31837]">EX</span>
+      LOGO
     </span>
   );
 }
