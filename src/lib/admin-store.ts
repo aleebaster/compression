@@ -578,7 +578,7 @@ interface AdminSettingsState {
 }
 
 const defaultSettings: Record<string, string> = {
-  shopName: "COMPEX",
+  shopName: "compression_mega_shop",
   description: "Компресійний одяг для спорту та активного способу життя",
   phone: "",
   email: "",
@@ -587,7 +587,7 @@ const defaultSettings: Record<string, string> = {
   instagram: "",
   telegram: "",
   tiktok: "",
-  metaTitle: "COMPEX — Компресійний одяг",
+  metaTitle: "compression_mega_shop — Компресійний одяг",
   metaDescription: "Інтернет-магазин компресійного одягу для спорту та активного способу життя",
   smtpHost: "",
   smtpPort: "587",
@@ -654,7 +654,7 @@ const defaultHeroContent: HeroContent[] = [
     id: "hc1",
     title: "Компресійний одяг для тренувань",
     subtitle: "Преміальна якість для дорослих та дітей",
-    description: "Відчуйте різницю з компресійним одягом COMPEX",
+    description: "Відчуйте різницю з компресійним одягом premium класу",
     buttonText: "Переглянути каталог",
     buttonLink: "/catalog",
     position: "center",

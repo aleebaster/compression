@@ -439,7 +439,7 @@ function EditModal({
                     onChange={(e) => updateField("description", e.target.value)}
                     rows={2}
                     className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[#E31837] focus:ring-1 focus:ring-[#E31837] resize-none"
-                    placeholder="Відчуйте різницю з компресійним одягом COMPEX"
+                    placeholder="Відчуйте різницю з компресійним одягом premium класу"
                   />
                 </div>
               </div>

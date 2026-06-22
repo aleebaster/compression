@@ -47,21 +47,16 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-[#111111]">
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none"
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <footer className="border-t border-gray-200 bg-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Top section */}
         <div className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block">
-              <Logo size="lg" className="text-white" />
+              <Logo size="lg" />
             </Link>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-400">
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-500">
               Преміальний компресійний одяг для активного життя та здоров&apos;я
             </p>
 
@@ -74,7 +69,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-neutral-400 transition-colors hover:border-[#E31837] hover:text-[#E31837]"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-colors hover:border-[#E31837] hover:text-[#E31837]"
                 >
                   <social.icon className="h-4 w-4" />
                 </a>
@@ -85,7 +80,7 @@ export default function Footer() {
           {/* Navigation columns */}
           {navLinks.map((group) => (
             <div key={group.title}>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
                 {group.title}
               </h3>
               <ul className="mt-4 space-y-3">
@@ -93,7 +88,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-neutral-400 transition-colors hover:text-[#E31837]"
+                      className="text-sm text-gray-500 transition-colors hover:text-[#E31837]"
                     >
                       {link.label}
                     </Link>
@@ -105,45 +100,39 @@ export default function Footer() {
         </div>
 
         {/* Contact + Payment */}
-        <div className="grid grid-cols-1 gap-8 border-t border-white/10 py-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 border-t border-gray-200 py-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Contact info */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
               Зв&apos;язатися з нами
             </h3>
             <ul className="mt-4 space-y-3">
               <li>
                 <a
-                  href="tel:+380504967515"
-                  className="flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-[#E31837]"
+                  href="tel:+380977585422"
+                  className="flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-[#E31837]"
                 >
                   <Phone className="h-4 w-4 shrink-0" />
-                  +38 (050) 496-75-15
+                  +38 (097) 758-54-22
                 </a>
               </li>
-              <li>
-                <a
-                  href="mailto:info@crossover.com.ua"
-                  className="flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-[#E31837]"
-                >
-                  <Mail className="h-4 w-4 shrink-0" />
-                  crossover.info@gmail.com
-                </a>
+              <li className="text-sm text-gray-500">
+                Олександр
               </li>
             </ul>
           </div>
 
           {/* Payment methods */}
           <div className="sm:col-span-2 lg:col-span-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
               Способи оплати
             </h3>
             <div className="mt-4 flex flex-wrap items-center gap-4">
-              {(["Visa", "Mastercard", "LiqPay", "Monobank"] as const).map(
+              {(["LiqPay", "Monobank", "Накладний платіж"] as const).map(
                 (method) => (
                   <span
                     key={method}
-                    className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-neutral-300"
+                    className="inline-flex items-center rounded-md border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600"
                   >
                     {method}
                   </span>
@@ -154,11 +143,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 sm:flex-row">
-          <p className="text-xs text-neutral-500">
-            &copy; 2026 Усі права захищені.
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200 py-6 sm:flex-row">
+          <p className="text-xs text-gray-400">
+            &copy; 2026 compression_mega_shop. Усі права захищені.
           </p>
-          <div className="flex items-center gap-4 text-xs text-neutral-500">
+          <div className="flex items-center gap-4 text-xs text-gray-400">
             <Link
               href="/privacy"
               className="transition-colors hover:text-[#E31837]"
@@ -166,10 +155,16 @@ export default function Footer() {
               Політика конфіденційності
             </Link>
             <Link
-              href="/terms"
+              href="/delivery"
               className="transition-colors hover:text-[#E31837]"
             >
-              Умови використання
+              Доставка та оплата
+            </Link>
+            <Link
+              href="/returns"
+              className="transition-colors hover:text-[#E31837]"
+            >
+              Повернення
             </Link>
           </div>
         </div>

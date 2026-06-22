@@ -23,7 +23,7 @@ export default function Logo({ className = "", size = "md" }: LogoProps) {
 
   return (
     <span className={`text-xl font-bold tracking-tight ${size === "lg" ? "text-2xl" : ""} ${className}`}>
-      LOGO
+      compression_mega_shop
     </span>
   );
 }

@@ -9,8 +9,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CheckCircle,
-  CreditCard,
-  Smartphone,
   ArrowLeft,
   Package,
 } from "lucide-react";
@@ -21,41 +19,16 @@ import Footer from "@/components/Footer";
 
 const checkoutSchema = z.object({
   firstName: z.string().min(1, "Введіть ім'я"),
-  lastName: z.string().optional(),
   phone: z
     .string()
     .min(1, "Введіть номер телефону")
     .regex(/^\+38\d{10}$/, "Невірний формат. Приклад: +380XXXXXXXXX"),
-  email: z.string().email("Невірний формат email").optional().or(z.literal("")),
   city: z.string().min(1, "Введіть місто"),
-  deliveryMethod: z.string().min(1, "Оберіть спосіб доставки"),
-  address: z.string().optional(),
+  novaPoshta: z.string().min(1, "Введіть відділення Нової Пошти"),
   comment: z.string().optional(),
-  paymentMethod: z.string().min(1, "Оберіть спосіб оплати"),
 });
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
-
-const deliveryMethods = [
-  { value: "nova_poshta отделение", label: "Нова Пошта — відділення" },
-  { value: "nova_poshta поштомат", label: "Нова Пошта — поштомат" },
-  { value: "ukrposhta", label: "Укрпошта" },
-];
-
-const paymentMethods = [
-  {
-    value: "liqpay",
-    label: "LiqPay",
-    description: "Картка, Apple Pay, Google Pay",
-    icon: CreditCard,
-  },
-  {
-    value: "monobank",
-    label: "Monobank",
-    description: "Оплата через Mono",
-    icon: Smartphone,
-  },
-];
 
 export default function CheckoutPage() {
   const {
@@ -78,18 +51,10 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: {
-      deliveryMethod: "nova_poshta отделение",
-      paymentMethod: "liqpay",
-    },
   });
-
-  const selectedDelivery = watch("deliveryMethod");
-  const selectedPayment = watch("paymentMethod");
 
   const onSubmit = async () => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -215,17 +180,6 @@ export default function CheckoutPage() {
                 </div>
                 <div>
                   <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Прізвище
-                  </label>
-                  <input
-                    type="text"
-                    {...register("lastName")}
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-[#E31837] focus:ring-1 focus:ring-[#E31837]"
-                    placeholder="Введіть прізвище"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
                     Телефон *
                   </label>
                   <input
@@ -237,22 +191,6 @@ export default function CheckoutPage() {
                   {errors.phone && (
                     <p className="mt-1 text-xs text-[#E31837]">
                       {errors.phone.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    {...register("email")}
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-[#E31837] focus:ring-1 focus:ring-[#E31837]"
-                    placeholder="email@example.com"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-xs text-[#E31837]">
-                      {errors.email.message}
                     </p>
                   )}
                 </div>
@@ -283,90 +221,22 @@ export default function CheckoutPage() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Спосіб доставки *
-                  </label>
-                  <div className="space-y-2">
-                    {deliveryMethods.map((method) => (
-                      <label
-                        key={method.value}
-                        className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
-                          selectedDelivery === method.value
-                            ? "border-[#E31837] bg-red-50"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          value={method.value}
-                          {...register("deliveryMethod")}
-                          className="h-4 w-4 accent-[#E31837]"
-                        />
-                        <span className="text-sm font-medium text-gray-700">
-                          {method.label}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                  {errors.deliveryMethod && (
-                    <p className="mt-1 text-xs text-[#E31837]">
-                      {errors.deliveryMethod.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
                   <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Адреса / номер відділення
+                    Відділення Нової Пошти *
                   </label>
                   <input
                     type="text"
-                    {...register("address")}
+                    {...register("novaPoshta")}
                     className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-[#E31837] focus:ring-1 focus:ring-[#E31837]"
-                    placeholder="Введіть адресу або номер відділення"
+                    placeholder="Номер або назва відділення"
                   />
+                  {errors.novaPoshta && (
+                    <p className="mt-1 text-xs text-[#E31837]">
+                      {errors.novaPoshta.message}
+                    </p>
+                  )}
                 </div>
               </div>
-            </div>
-
-            {/* Payment */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6">
-              <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                Спосіб оплати
-              </h2>
-              <div className="space-y-2">
-                {paymentMethods.map((method) => (
-                  <label
-                    key={method.value}
-                    className={`flex cursor-pointer items-center gap-4 rounded-xl border px-4 py-4 transition-colors ${
-                      selectedPayment === method.value
-                        ? "border-[#E31837] bg-red-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      value={method.value}
-                      {...register("paymentMethod")}
-                      className="h-4 w-4 accent-[#E31837]"
-                    />
-                    <method.icon className="h-5 w-5 text-gray-500" />
-                    <div>
-                      <span className="text-sm font-medium text-gray-700">
-                        {method.label}
-                      </span>
-                      <p className="text-xs text-gray-500">
-                        {method.description}
-                      </p>
-                    </div>
-                  </label>
-                ))}
-              </div>
-              {errors.paymentMethod && (
-                <p className="mt-2 text-xs text-[#E31837]">
-                  {errors.paymentMethod.message}
-                </p>
-              )}
             </div>
 
             {/* Comment */}

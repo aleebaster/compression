@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@compex.ua"
+                placeholder="admin@compression.shop"
                 className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition-colors focus:border-[#E31837] focus:bg-white focus:ring-1 focus:ring-[#E31837]"
               />
             </div>

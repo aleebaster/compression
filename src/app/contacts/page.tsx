@@ -11,17 +11,13 @@ const contactItems = [
   {
     icon: Phone,
     title: "Телефон",
-    details: ["+380 (44) 123-45-67", "+380 (67) 123-45-67"],
-  },
-  {
-    icon: Mail,
-    title: "Електронна пошта",
-    details: ["info@example.com", "support@example.com"],
+    details: ["+38 (097) 758-54-22"],
+    subtitle: "Олександр",
   },
   {
     icon: MapPin,
-    title: "Адреса",
-    details: ["м. Київ, вул. Хрещатик, 22", "Індекс: 01001"],
+    title: "Доставка",
+    details: ["Нова Пошта по всій Україні", "Укрпошта"],
   },
   {
     icon: Clock,

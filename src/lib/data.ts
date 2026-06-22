@@ -28,7 +28,7 @@ export const categories: Category[] = [
 ];
 
 export const brands: Brand[] = [
-  { id: "b1", name: "Compex Pro", slug: "compex-pro" },
+  { id: "b1", name: "Premium Line", slug: "premium-line" },
   { id: "b2", name: "Athletic Edge", slug: "athletic-edge" },
   { id: "b3", name: "FitWear", slug: "fitwear" },
 ];

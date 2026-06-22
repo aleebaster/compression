@@ -14,9 +14,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Преміальний компресійний одяг",
+  title: {
+    default: "compression_mega_shop — Преміальний компресійний одяг",
+    template: "%s | compression_mega_shop",
+  },
   description:
-    "Преміальний компресійний одяг для дорослих та дітей. Ідеальна підтримка м'язів під час тренувань, відведення вологи та максимальний комфорт.",
+    "Преміальний компресійний одяг для чоловіків та дітей. Рашгарди, шорти, футболки, комплекти 2-5в1. Доставка по Україні.",
+  keywords: ["компресійний одяг", "рашгард", "компресійні шорти", "спорт", "MMA", "фітнес", "UFC"],
+  openGraph: {
+    type: "website",
+    locale: "uk_UA",
+    siteName: "compression_mega_shop",
+    title: "compression_mega_shop — Преміальний компресійний одяг",
+    description: "Преміальний компресійний одяг для чоловіків та дітей. Рашгарди, шорти, футболки, комплекти.",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({

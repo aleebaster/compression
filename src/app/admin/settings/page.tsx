@@ -170,7 +170,7 @@ export default function AdminSettingsPage() {
           <div className="space-y-4">
             <InputField
               label="Назва магазину"
-              placeholder="COMPEX"
+              placeholder="compression_mega_shop"
               value={localSettings.shopName || ""}
               onChange={(v) => update("shopName", v)}
             />
@@ -193,7 +193,7 @@ export default function AdminSettingsPage() {
             />
             <InputField
               label="Email"
-              placeholder="info@compex.ua"
+              placeholder="info@compression.shop"
               value={localSettings.email || ""}
               onChange={(v) => update("email", v)}
               type="email"
@@ -212,25 +212,25 @@ export default function AdminSettingsPage() {
           <div className="space-y-4">
             <InputField
               label="Facebook URL"
-              placeholder="https://facebook.com/compex"
+              placeholder="https://facebook.com/compression"
               value={localSettings.facebook || ""}
               onChange={(v) => update("facebook", v)}
             />
             <InputField
               label="Instagram URL"
-              placeholder="https://instagram.com/compex"
+              placeholder="https://instagram.com/compression"
               value={localSettings.instagram || ""}
               onChange={(v) => update("instagram", v)}
             />
             <InputField
               label="Telegram URL"
-              placeholder="https://t.me/compex"
+              placeholder="https://t.me/compression"
               value={localSettings.telegram || ""}
               onChange={(v) => update("telegram", v)}
             />
             <InputField
               label="TikTok URL"
-              placeholder="https://tiktok.com/@compex"
+              placeholder="https://tiktok.com/@compression"
               value={localSettings.tiktok || ""}
               onChange={(v) => update("tiktok", v)}
             />
@@ -241,7 +241,7 @@ export default function AdminSettingsPage() {
           <div className="space-y-4">
             <InputField
               label="Meta Title"
-              placeholder="COMPEX — Компресійний одяг"
+              placeholder="compression_mega_shop — Компресійний одяг"
               value={localSettings.metaTitle || ""}
               onChange={(v) => update("metaTitle", v)}
             />

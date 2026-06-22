@@ -20,7 +20,7 @@ async function main() {
   });
 
   const defaultSettings: Record<string, string> = {
-    shopName: "COMPEX",
+    shopName: "compression_mega_shop",
     description: "Компресійний одяг для спорту та активного способу життя",
     phone: "",
     email: "",
@@ -29,7 +29,7 @@ async function main() {
     instagram: "",
     telegram: "",
     tiktok: "",
-    metaTitle: "COMPEX — Компресійний одяг",
+    metaTitle: "compression_mega_shop — Компресійний одяг",
     metaDescription: "Інтернет-магазин компресійного одягу для спорту та активного способу життя",
     smtpHost: "",
     smtpPort: "587",
@@ -91,9 +91,9 @@ async function main() {
   });
 
   const brand1 = await prisma.brand.upsert({
-    where: { slug: "compex-pro" },
+    where: { slug: "premium-line" },
     update: {},
-    create: { name: "Compex Pro", slug: "compex-pro" },
+    create: { name: "Premium Line", slug: "premium-line" },
   });
 
   await prisma.product.upsert({

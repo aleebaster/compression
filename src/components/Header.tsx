@@ -5,14 +5,13 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Search, ShoppingBag, User, ChevronDown } from "lucide-react";
 import { useCartStore } from "@/lib/store";
-import { categories } from "@/lib/data";
 import Logo from "@/components/Logo";
 
 const navLinks = [
   { label: "Новинки", href: "/new" },
   { label: "Чоловічий", href: "/category/men" },
   { label: "Дитячий", href: "/category/kids" },
-  { label: "Всі товари", href: "/catalog" },
+  { label: "Каталог", href: "/catalog" },
 ];
 
 export default function Header() {
@@ -52,12 +51,17 @@ export default function Header() {
     }
   };
 
-  const getCategorySlug = (label: string): string | null => {
-    const map: Record<string, string> = {
-      Чоловічий: "men",
-      Дитячий: "kids",
-    };
-    return map[label] ?? null;
+  const subcategories: Record<string, { label: string; href: string }[]> = {
+    Чоловічий: [
+      { label: "Комплект 2в1", href: "/category/men-2v1" },
+      { label: "Комплект 3в1", href: "/category/men-3v1" },
+      { label: "Комплект 4в1", href: "/category/men-4v1" },
+      { label: "Комплект 5в1", href: "/category/men-5v1" },
+    ],
+    Дитячий: [
+      { label: "Комплект 3в1", href: "/category/kids-3v1" },
+      { label: "Комплект 4в1", href: "/category/kids-4v1" },
+    ],
   };
 
   return (
@@ -92,12 +96,8 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex lg:items-center lg:gap-1">
               {navLinks.map((link) => {
-                const categorySlug = getCategorySlug(link.label);
-                const category = categorySlug
-                  ? categories.find((c) => c.slug === categorySlug)
-                  : null;
-                const hasChildren =
-                  category?.children && category.children.length > 0;
+                const subs = subcategories[link.label];
+                const hasChildren = subs && subs.length > 0;
 
                 return (
                   <div
@@ -125,8 +125,7 @@ export default function Header() {
                     {/* Dropdown */}
                     <AnimatePresence>
                       {hasChildren &&
-                        activeDropdown === link.label &&
-                        category?.children && (
+                        activeDropdown === link.label && (
                           <motion.div
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -140,13 +139,13 @@ export default function Header() {
                             >
                               Всі {link.label.toLowerCase()}
                             </Link>
-                            {category.children.map((child) => (
+                            {subs.map((sub) => (
                               <Link
-                                key={child.id}
-                                href={`/category/${child.slug}`}
+                                key={sub.href}
+                                href={sub.href}
                                 className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#E31837]"
                               >
-                                {child.name}
+                                {sub.label}
                               </Link>
                             ))}
                           </motion.div>
@@ -306,12 +305,7 @@ export default function Header() {
               <nav className="flex-1 overflow-y-auto px-4 py-4">
                 <div className="space-y-1">
                   {navLinks.map((link) => {
-                    const categorySlug = getCategorySlug(link.label);
-                    const category = categorySlug
-                      ? categories.find((c) => c.slug === categorySlug)
-                      : null;
-                    const hasChildren =
-                      category?.children && category.children.length > 0;
+                    const subs = subcategories[link.label];
 
                     return (
                       <div key={link.href}>
@@ -322,16 +316,16 @@ export default function Header() {
                         >
                           {link.label}
                         </Link>
-                        {hasChildren && category?.children && (
+                        {subs && (
                           <div className="ml-4 border-l-2 border-gray-100 pl-4">
-                            {category.children.map((child) => (
+                            {subs.map((sub) => (
                               <Link
-                                key={child.id}
-                                href={`/category/${child.slug}`}
+                                key={sub.href}
+                                href={sub.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="block rounded-lg px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#E31837]"
                               >
-                                {child.name}
+                                {sub.label}
                               </Link>
                             ))}
                           </div>

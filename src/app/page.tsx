@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Truck, ShieldCheck, RotateCcw, Headphones, ArrowRight } from "lucide-react";
+import { Truck, ShieldCheck, RotateCcw, Headphones, ArrowRight, Star, Zap } from "lucide-react";
 import Link from "next/link";
 
 import Header from "@/components/Header";
@@ -31,37 +31,55 @@ const categories = [
   {
     title: "Чоловічий",
     slug: "men",
-    gradient: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
     description: "Компресійний одяг для чоловіків",
+    items: ["Рашгарди", "Шорти", "Футболки", "Комплекти"],
   },
   {
     title: "Дитячий",
     slug: "kids",
-    gradient: "linear-gradient(135deg, #1f2937 0%, #1e3a5f 100%)",
     description: "Компресійний одяг для дітей",
+    items: ["Футболки", "Шорти", "Комплекти"],
   },
 ];
 
 const benefits = [
   {
     icon: Truck,
-    title: "Безкоштовна доставка від 2000₴",
-    description: "Доставляємо по всій Україні",
+    title: "Безкоштовна доставка",
+    description: "Від 2000₴ по Україні",
   },
   {
     icon: ShieldCheck,
     title: "Гарантія якості",
-    description: "Тільки оригінальна продукція",
+    description: "Оригінальна продукція",
   },
   {
     icon: RotateCcw,
     title: "Повернення 30 днів",
-    description: "Просте повернення та обмін",
+    description: "Просте повернення",
   },
   {
     icon: Headphones,
     title: "Підтримка 24/7",
-    description: "Завжди на зв'язку для вас",
+    description: "Завжди на зв'язку",
+  },
+];
+
+const features = [
+  {
+    icon: Zap,
+    title: "Компресія м'язів",
+    description: "Підтримка під час тренувань та швидше відновлення",
+  },
+  {
+    icon: Star,
+    title: "Преміальні матеріали",
+    description: "Технологічна тканина з відведенням вологи",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Для дорослих та дітей",
+    description: "Широкий вибір розмірів для всієї родини",
   },
 ];
 
@@ -100,6 +118,59 @@ export default function HomePage() {
         {/* Hero */}
         <HeroBanner />
 
+        {/* About Section */}
+        <AnimatedSection className="py-16 sm:py-24 bg-white">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+              <div>
+                <span className="inline-block rounded-full bg-[#E31837]/10 px-4 py-1.5 text-xs font-semibold tracking-wider text-[#E31837]">
+                  ПРО НАС
+                </span>
+                <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+                  Преміальний компресійний одяг
+                </h2>
+                <p className="mt-4 text-gray-600 leading-relaxed">
+                  compression_mega_shop — це компресійний одяг для чоловіків та дітей.
+                  Ми пропонуємо рашгарди, шорти, футболки та комплекти 2-5в1 для
+                  занять спортом, бойовими мистецтвами та активного відпочинку.
+                </p>
+                <div className="mt-6 space-y-3">
+                  {features.map((feature) => (
+                    <div key={feature.title} className="flex items-start gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E31837]/10 text-[#E31837]">
+                        <feature.icon className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-gray-900">{feature.title}</h3>
+                        <p className="text-sm text-gray-500">{feature.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="relative rounded-3xl bg-gray-50 p-8 sm:p-12">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-[#E31837]/10" />
+                <div className="absolute -bottom-4 -left-4 h-32 w-32 rounded-full bg-[#E31837]/5" />
+                <div className="relative text-center">
+                  <div className="text-6xl font-bold text-[#E31837]">5+</div>
+                  <div className="mt-2 text-lg font-semibold text-gray-900">Років досвіду</div>
+                  <div className="mt-1 text-sm text-gray-500">Надійний якісний одяг</div>
+                </div>
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  <div className="rounded-xl bg-white p-4 text-center shadow-sm">
+                    <div className="text-2xl font-bold text-gray-900">1000+</div>
+                    <div className="text-xs text-gray-500">Задоволених клієнтів</div>
+                  </div>
+                  <div className="rounded-xl bg-white p-4 text-center shadow-sm">
+                    <div className="text-2xl font-bold text-gray-900">50+</div>
+                    <div className="text-xs text-gray-500">Моделей одягу</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+
         {/* Categories */}
         <AnimatedSection className="py-16 sm:py-24 bg-gray-50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -115,28 +186,28 @@ export default function HomePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2"
             >
               {categories.map((cat) => (
                 <motion.div key={cat.slug} variants={fadeUp}>
                   <Link
                     href={`/catalog?gender=${cat.slug}`}
-                    className="group relative block h-80 overflow-hidden rounded-2xl"
+                    className="group block rounded-2xl border border-gray-200 bg-white p-8 transition-all hover:border-[#E31837] hover:shadow-lg"
                   >
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ background: cat.gradient }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-end p-6 text-center">
-                      <h3 className="text-2xl font-bold text-white mb-1">
-                        {cat.title}
-                      </h3>
-                      <p className="text-sm text-white/80">{cat.description}</p>
-                      <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#E31837] group-hover:gap-3 transition-all">
-                        Переглянути
-                        <ArrowRight className="h-4 w-4" />
-                      </div>
+                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#E31837] transition-colors">
+                      {cat.title}
+                    </h3>
+                    <p className="mt-2 text-gray-500">{cat.description}</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {cat.items.map((item) => (
+                        <span key={item} className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-[#E31837] group-hover:gap-3 transition-all">
+                      Переглянути
+                      <ArrowRight className="h-4 w-4" />
                     </div>
                   </Link>
                 </motion.div>

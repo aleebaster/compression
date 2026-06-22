@@ -18,8 +18,8 @@ export const defaultEmailConfig: EmailConfig = {
   port: 587,
   user: "",
   password: "",
-  senderEmail: "noreply@compex.ua",
-  senderName: "COMPEX Store",
+  senderEmail: "noreply@compression.shop",
+  senderName: "compression_mega_shop",
 };
 
 export async function sendEmail(
@@ -53,7 +53,7 @@ export function orderConfirmationEmail(
         <ul>${itemsHtml}</ul>
         <p style="font-size: 18px;"><strong>Загальна сума: ${total} ₴</strong></p>
         <hr />
-        <p style="color: #666;">COMPEX Store — Компресійний одяг для спорту</p>
+        <p style="color: #666;">compression_mega_shop — Компресійний одяг для спорту</p>
       </div>
     `,
   };
@@ -79,7 +79,7 @@ export function orderStatusEmail(
         <p>Номер замовлення: <strong>${orderNumber}</strong></p>
         <p>Новий статус: <strong>${statusLabels[status] || status}</strong></p>
         <hr />
-        <p style="color: #666;">COMPEX Store — Компресійний одяг для спорту</p>
+        <p style="color: #666;">compression_mega_shop — Компресійний одяг для спорту</p>
       </div>
     `,
   };
@@ -88,14 +88,14 @@ export function orderStatusEmail(
 export function testEmail(adminEmail: string): EmailMessage {
   return {
     to: adminEmail,
-    subject: "Тестовий лист COMPEX Store",
+    subject: "Тестовий лист compression_mega_shop",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #333;">Тестовий лист</h1>
-        <p>Це тестовий лист з системи email COMPEX Store.</p>
+        <p>Це тестовий лист з системи email compression_mega_shop.</p>
         <p>Якщо ви отримали цей лист, налаштування SMTP працюють правильно.</p>
         <hr />
-        <p style="color: #666;">COMPEX Store — Компресійний одяг для спорту</p>
+        <p style="color: #666;">compression_mega_shop — Компресійний одяг для спорту</p>
       </div>
     `,
   };
